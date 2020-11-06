@@ -30,10 +30,11 @@ public class FrmProduct extends javax.swing.JDialog {
     /**
      * Creates new form FrmProduct
      */
-    public FrmProduct(java.awt.Frame parent, boolean modal) {
+    public FrmProduct(java.awt.Frame parent, boolean modal) throws Exception {
         super(parent, modal);
         initComponents();
         prepareForm();
+            
     }
 
     /**
@@ -73,6 +74,7 @@ public class FrmProduct extends javax.swing.JDialog {
         lblPriceWithoutWatError = new javax.swing.JLabel();
         txtVATPercentage = new javax.swing.JTextField();
         btnCalculatePriceWithVAT = new javax.swing.JButton();
+        lblCategoryError = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
 
@@ -103,6 +105,7 @@ public class FrmProduct extends javax.swing.JDialog {
 
         cmbCategory.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         cmbCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbCategory.setSelectedIndex(-1);
         cmbCategory.setPreferredSize(new java.awt.Dimension(65, 29));
 
         lblDescription.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -185,6 +188,8 @@ public class FrmProduct extends javax.swing.JDialog {
             }
         });
 
+        lblCategoryError.setForeground(new java.awt.Color(229, 10, 10));
+
         javax.swing.GroupLayout panelProductLayout = new javax.swing.GroupLayout(panelProduct);
         panelProduct.setLayout(panelProductLayout);
         panelProductLayout.setHorizontalGroup(
@@ -230,10 +235,6 @@ public class FrmProduct extends javax.swing.JDialog {
                     .addGroup(panelProductLayout.createSequentialGroup()
                         .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelProductLayout.createSequentialGroup()
-                                .addComponent(lblCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cmbCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelProductLayout.createSequentialGroup()
                                 .addComponent(lblPriceWithoutVat, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtPriceWithoutVAT, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -249,7 +250,13 @@ public class FrmProduct extends javax.swing.JDialog {
                                         .addGap(139, 139, 139)))
                                 .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnCalculatePriceWithVAT)
-                                    .addComponent(txtPriceWithVAT, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtPriceWithVAT, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelProductLayout.createSequentialGroup()
+                                .addComponent(lblCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblCategoryError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbCategory, 0, 252, Short.MAX_VALUE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -270,38 +277,40 @@ public class FrmProduct extends javax.swing.JDialog {
                     .addGroup(panelProductLayout.createSequentialGroup()
                         .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelProductLayout.createSequentialGroup()
-                                .addGap(87, 87, 87)
-                                .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnRemoveSize)
-                                    .addGroup(panelProductLayout.createSequentialGroup()
-                                        .addComponent(lblSelectedSizes)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(panelProductLayout.createSequentialGroup()
                                 .addGap(8, 8, 8)
-                                .addComponent(lblArticleError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblArticleError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblCategoryError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblArticle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtArticle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(panelProductLayout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(lblNameError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelProductLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblArticle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtArticle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(panelProductLayout.createSequentialGroup()
-                                        .addGap(27, 27, 27)
-                                        .addComponent(lblNameError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelProductLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblSizeError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(7, 7, 7)))
+                                    .addComponent(lblSelectedSizes)
+                                    .addComponent(lblSizeError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelProductLayout.createSequentialGroup()
                                 .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cmbSize, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAddSize, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addComponent(lblPriceWithoutWatError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAddSize, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(panelProductLayout.createSequentialGroup()
+                                .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelProductLayout.createSequentialGroup()
+                                        .addGap(56, 56, 56)
+                                        .addComponent(btnRemoveSize))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addComponent(lblPriceWithoutWatError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDescription)
@@ -457,6 +466,7 @@ public class FrmProduct extends javax.swing.JDialog {
     private javax.swing.JLabel lblArticle;
     private javax.swing.JLabel lblArticleError;
     private javax.swing.JLabel lblCategory;
+    private javax.swing.JLabel lblCategoryError;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNameError;
@@ -482,6 +492,7 @@ public class FrmProduct extends javax.swing.JDialog {
         for (Category category : categories) {
             cmbCategory.addItem(category);
         }
+        cmbCategory.setSelectedIndex(-1);
     }
 
     private void fillCmbSize() {
@@ -492,14 +503,20 @@ public class FrmProduct extends javax.swing.JDialog {
         }
     }
     
-    private void resetForm() {
+    private void resetErrors() {
         lblArticleError.setText("");
         lblNameError.setText("");
+        lblCategoryError.setText("");
         lblSizeError.setText("");
         lblPriceWithoutWatError.setText("");
+    }
+    
+    private void resetForm() {
+        resetErrors();
         txtArticle.setText("");
         txtName.setText("");
         txtDescription.setText("");
+        cmbCategory.setSelectedIndex(-1);
         txtPriceWithoutVAT.setText("");
         txtPriceWithVAT.setText("");
         
@@ -517,6 +534,7 @@ public class FrmProduct extends javax.swing.JDialog {
     }
 
     private void validateForm() throws RequiredFieldsEmptyException {
+        resetErrors();
         boolean errors = false;
         
         if (txtArticle.getText() == null || txtArticle.getText().isEmpty()) {
@@ -525,6 +543,10 @@ public class FrmProduct extends javax.swing.JDialog {
         }
         if (txtName.getText() == null || txtName.getText().isEmpty()) {
             lblNameError.setText("Required!");
+            errors = true;
+        }
+        if (cmbCategory.getSelectedIndex() == -1) {
+            lblCategoryError.setText("Required!");
             errors = true;
         }
         if (getSelectedSizes() == null || getSelectedSizes().isEmpty()) {

@@ -6,6 +6,8 @@
 package rs.ac.bg.fon.ps.view.form;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -38,6 +40,7 @@ public class FrmMain extends javax.swing.JFrame {
         menuMain = new javax.swing.JMenuBar();
         menuProduct = new javax.swing.JMenu();
         miProductNew = new javax.swing.JMenuItem();
+        miProductSearch = new javax.swing.JMenuItem();
         menuAbout = new javax.swing.JMenu();
         menuUser = new javax.swing.JMenu();
         miLogOut = new javax.swing.JMenuItem();
@@ -66,6 +69,17 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
         menuProduct.add(miProductNew);
+
+        miProductSearch.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miProductSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        miProductSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/search.png"))); // NOI18N
+        miProductSearch.setText("Search");
+        miProductSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miProductSearchActionPerformed(evt);
+            }
+        });
+        menuProduct.add(miProductSearch);
 
         menuMain.add(menuProduct);
 
@@ -112,9 +126,14 @@ public class FrmMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void miProductNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductNewActionPerformed
-        JDialog dialog = new FrmProduct(this, true);
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
+        try {
+            JDialog dialog = new FrmProduct(this, true);
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error occured. View initialisation failed.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_miProductNewActionPerformed
 
     private void miLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogOutActionPerformed
@@ -129,6 +148,17 @@ public class FrmMain extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_miLogOutActionPerformed
+
+    private void miProductSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductSearchActionPerformed
+        try {
+            JDialog dialog = new FrmSearchProducts(this, true);
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error occured. View initialisation failed.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_miProductSearchActionPerformed
 
     private void prepareForm() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -147,5 +177,6 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenu menuUser;
     private javax.swing.JMenuItem miLogOut;
     private javax.swing.JMenuItem miProductNew;
+    private javax.swing.JMenuItem miProductSearch;
     // End of variables declaration//GEN-END:variables
 }

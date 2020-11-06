@@ -80,4 +80,8 @@ public class Controller {
         storageProduct.add(product);
     }
     
+    public List<Product> getAllProducts() {
+        return storageProduct.getAll();
+    }
+    
 }

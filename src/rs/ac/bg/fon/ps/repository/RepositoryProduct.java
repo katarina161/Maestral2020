@@ -30,4 +30,8 @@ public class RepositoryProduct {
         }
     }
     
+    public List<Product> getAll() {
+        return products;
+    }
+    
 }
