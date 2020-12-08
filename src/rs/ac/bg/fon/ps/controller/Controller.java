@@ -12,10 +12,11 @@ import rs.ac.bg.fon.ps.domain.Size;
 import rs.ac.bg.fon.ps.domain.User;
 import rs.ac.bg.fon.ps.exception.IncorrectPasswordException;
 import rs.ac.bg.fon.ps.exception.UnknownUserException;
-import rs.ac.bg.fon.ps.repository.RepositoryCategory;
-import rs.ac.bg.fon.ps.repository.RepositoryProduct;
-import rs.ac.bg.fon.ps.repository.RepositorySize;
-import rs.ac.bg.fon.ps.repository.RepositoryUser;
+import rs.ac.bg.fon.ps.repository.Repository;
+import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbCategory;
+import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbProduct;
+import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbSize;
+import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbUser;
 
 /**
  *
@@ -24,18 +25,16 @@ import rs.ac.bg.fon.ps.repository.RepositoryUser;
 public class Controller {
     
     private static Controller instance;
-    private final RepositoryUser storageUser;
-    private final RepositoryCategory storageCategory;
-    private final RepositorySize storageSize;
-    private final RepositoryProduct storageProduct;
-    
-    private User currentUser;
+    private final Repository storageUser;
+    private final Repository storageCategory;
+    private final Repository storageSize;
+    private final Repository storageProduct;
     
     private Controller() {
-        storageUser = new RepositoryUser();
-        storageCategory = new RepositoryCategory();
-        storageSize = new RepositorySize();
-        storageProduct = new RepositoryProduct();
+        storageUser = new RepositoryDbUser();
+        storageCategory = new RepositoryDbCategory();
+        storageSize = new RepositoryDbSize();
+        storageProduct = new RepositoryDbProduct();
     }
     
     public static Controller getInstance() {
@@ -47,11 +46,18 @@ public class Controller {
     }
     
     public User logIn(String username, String password) throws Exception {
-        List<User> users = storageUser.getAll();
+        storageUser.connect();
+        List<User> users = null;
+        try {
+            users = storageUser.getAll();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            storageUser.disconnect();
+        }
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 if (user.getPassword().equals(password)) {
-                    currentUser = user;
                     return user;
                 }
                 throw new IncorrectPasswordException("Incorrect password.");
@@ -60,28 +66,76 @@ public class Controller {
         throw new UnknownUserException("Unknown user.");
     }
     
-    public void setCurrentUser(User user) {
-        currentUser = user;
+    public List<Category> getAllCategories() throws Exception {
+        storageCategory.connect();
+        List<Category> categories = null;
+        try {
+            categories = storageCategory.getAll();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            storageCategory.disconnect();
+        }
+        return categories;
     }
     
-    public User getCurrentUser() {
-        return currentUser;
-    }
-    
-    public List<Category> getAllCategories() {
-        return storageCategory.getAll();
-    }
-    
-    public List<Size> getAllSizes() {
-        return storageSize.getAll();
+    public List<Size> getAllSizes() throws Exception {
+        storageSize.connect();
+        List<Size> sizes = null;
+        try {
+            sizes = storageSize.getAll();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            storageSize.disconnect();
+        }
+        return sizes;
     }
     
     public void addProduct(Product product) throws Exception {
-        storageProduct.add(product);
+        storageProduct.connect();
+        try {
+            storageProduct.add(product);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            storageProduct.disconnect();
+        }
     }
     
-    public List<Product> getAllProducts() {
-        return storageProduct.getAll();
+    public List<Product> getAllProducts() throws Exception {
+        storageProduct.connect();
+        List<Product> products = null;
+        try {
+            products = storageProduct.getAll();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            storageProduct.disconnect();
+        }
+        return products;
+    }
+
+    public void updateProduct(Product product) throws Exception {
+        storageProduct.connect();
+        try {
+            storageProduct.update(product);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            storageProduct.disconnect();
+        }
+    }
+
+    public void deleteProduct(Product product) throws Exception {
+        storageProduct.connect();
+        try {
+            storageProduct.delete(product);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            storageProduct.disconnect();
+        }
     }
     
 }

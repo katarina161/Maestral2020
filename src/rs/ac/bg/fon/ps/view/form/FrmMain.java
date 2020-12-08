@@ -6,12 +6,11 @@
 package rs.ac.bg.fon.ps.view.form;
 
 import java.awt.Color;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import rs.ac.bg.fon.ps.controller.Controller;
+import rs.ac.bg.fon.ps.view.controller.ViewController;
 
 /**
  *
@@ -126,22 +125,14 @@ public class FrmMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void miProductNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductNewActionPerformed
-        try {
-            JDialog dialog = new FrmProduct(this, true);
-            dialog.setLocationRelativeTo(this);
-            dialog.setVisible(true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error occured. View initialisation failed.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        ViewController.getInstance().openProductForm();
     }//GEN-LAST:event_miProductNewActionPerformed
 
     private void miLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogOutActionPerformed
         try {
-            Controller.getInstance().setCurrentUser(null);
             this.dispose();
+            ViewController.getInstance().logOUt();
             JOptionPane.showMessageDialog(this, "You've been successfully logged out.", "Log out", JOptionPane.INFORMATION_MESSAGE);
-            new FrmLogIn().setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error occured. Log out failed.", "Log out error", JOptionPane.ERROR_MESSAGE);
@@ -150,21 +141,14 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_miLogOutActionPerformed
 
     private void miProductSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductSearchActionPerformed
-        try {
-            JDialog dialog = new FrmSearchProducts(this, true);
-            dialog.setLocationRelativeTo(this);
-            dialog.setVisible(true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error occured. View initialisation failed.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        ViewController.getInstance().openSearchProductsForm();
     }//GEN-LAST:event_miProductSearchActionPerformed
 
     private void prepareForm() {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         getContentPane().setBackground(Color.WHITE);
-        menuUser.setText(Controller.getInstance().getCurrentUser().getUsername());
+        menuUser.setText(ViewController.getInstance().getCurrentUser().getUsername());
     }
     
 

@@ -20,6 +20,8 @@ import rs.ac.bg.fon.ps.domain.Size;
 import rs.ac.bg.fon.ps.exception.NegativePriceException;
 import rs.ac.bg.fon.ps.exception.ProductAlreadyExistException;
 import rs.ac.bg.fon.ps.exception.RequiredFieldsEmptyException;
+import rs.ac.bg.fon.ps.view.controller.ViewController;
+import rs.ac.bg.fon.ps.view.util.FormMode;
 
 /**
  *
@@ -30,10 +32,17 @@ public class FrmProduct extends javax.swing.JDialog {
     /**
      * Creates new form FrmProduct
      */
-    public FrmProduct(java.awt.Frame parent, boolean modal) throws Exception {
+    public FrmProduct(java.awt.Frame parent, boolean modal, FormMode formMode) {
         super(parent, modal);
         initComponents();
-        prepareForm();
+        try {
+            prepareForm(formMode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "View initialisation failed!", "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        }
+        
             
     }
 
@@ -77,6 +86,9 @@ public class FrmProduct extends javax.swing.JDialog {
         lblCategoryError = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
+        btnRevert = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Product");
@@ -359,6 +371,36 @@ public class FrmProduct extends javax.swing.JDialog {
             }
         });
 
+        btnRevert.setBackground(new java.awt.Color(2, 26, 126));
+        btnRevert.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
+        btnRevert.setForeground(new java.awt.Color(255, 255, 255));
+        btnRevert.setText("Revert");
+        btnRevert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRevertActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(2, 26, 126));
+        btnUpdate.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(204, 0, 0));
+        btnDelete.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -367,13 +409,17 @@ public class FrmProduct extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(183, 183, 183)
                         .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRevert, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -382,8 +428,13 @@ public class FrmProduct extends javax.swing.JDialog {
                 .addComponent(panelProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnReset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRevert, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -446,18 +497,77 @@ public class FrmProduct extends javax.swing.JDialog {
         calculatePriceWithVAT(); 
     }//GEN-LAST:event_btnCalculatePriceWithVATActionPerformed
 
-    private void prepareForm() {
+    private void btnRevertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevertActionPerformed
+        resetForm();
+        fillProductForm();
+    }//GEN-LAST:event_btnRevertActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        try {
+            validateForm();
+            calculatePriceWithVAT();
+            Product product = new Product();
+            product.setArticle(Long.parseLong(txtArticle.getText().trim()));
+            product.setName(txtName.getText().trim());
+            product.setDescription(txtDescription.getText().trim());
+            product.setCategory((Category) cmbCategory.getSelectedItem());
+            product.setSizes((List<Size>)(List<?>) getSelectedSizes());
+            product.setPriceWithoutVAT(new BigDecimal(txtPriceWithoutVAT.getText().trim()));
+            product.setPriceWithVAT(new BigDecimal(txtPriceWithVAT.getText().trim()));
+            Controller.getInstance().updateProduct(product);
+            ViewController.getInstance().refreshProductsView();
+            JOptionPane.showMessageDialog(this, "Product successfully updates!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (RequiredFieldsEmptyException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Please fill out all of the required fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error occured. Update product failed.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this product?",
+                        "Confirm", JOptionPane.YES_NO_OPTION);
+        if (answer == 0) {
+            try {
+                Product product = new Product();
+                product.setArticle(Long.parseLong(txtArticle.getText().trim()));
+                product.setName(txtName.getText().trim());
+                product.setDescription(txtDescription.getText().trim());
+                product.setCategory((Category) cmbCategory.getSelectedItem());
+                product.setSizes((List<Size>)(List<?>) getSelectedSizes());
+                product.setPriceWithoutVAT(new BigDecimal(txtPriceWithoutVAT.getText().trim()));
+                product.setPriceWithVAT(new BigDecimal(txtPriceWithVAT.getText().trim()));
+                Controller.getInstance().deleteProduct(product);
+                JOptionPane.showMessageDialog(this, "Product successfully deleted!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                ViewController.getInstance().refreshProductsView();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error occured. Delete product failed.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void prepareForm(FormMode formMode) throws Exception {
         setResizable(false);
         fillCmbCategory();
         fillCmbSize();
+        
+        setupForm(formMode);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSize;
     private javax.swing.JButton btnCalculatePriceWithVAT;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnRemoveSize;
     private javax.swing.JButton btnReset;
+    private javax.swing.JButton btnRevert;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<Object> cmbCategory;
     private javax.swing.JComboBox<Object> cmbSize;
     private javax.swing.JScrollPane jScrollPane1;
@@ -486,7 +596,7 @@ public class FrmProduct extends javax.swing.JDialog {
     private javax.swing.JTextField txtVATPercentage;
     // End of variables declaration//GEN-END:variables
 
-    private void fillCmbCategory() {
+    private void fillCmbCategory() throws Exception {
         cmbCategory.removeAllItems();
         List<Category> categories = Controller.getInstance().getAllCategories();
         for (Category category : categories) {
@@ -495,7 +605,7 @@ public class FrmProduct extends javax.swing.JDialog {
         cmbCategory.setSelectedIndex(-1);
     }
 
-    private void fillCmbSize() {
+    private void fillCmbSize() throws Exception {
         cmbSize.removeAllItems();
         List<Size> sizes = Controller.getInstance().getAllSizes();
         for (Size size : sizes) {
@@ -587,6 +697,49 @@ public class FrmProduct extends javax.swing.JDialog {
             Logger.getLogger(FrmProduct.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    private void setupForm(FormMode formMode) {
+        switch(formMode) {
+            case FORM_ADD:
+                this.setTitle("Add new Product");
+                btnSave.setVisible(true);
+                btnReset.setVisible(true);
+                btnRevert.setVisible(false);
+                btnUpdate.setVisible(false);
+                btnDelete.setVisible(false);
+                break;
+            case FORM_DETAIL:
+                this.setTitle("Update Product");
+                btnSave.setVisible(false);
+                btnReset.setVisible(false);
+                btnRevert.setVisible(true);
+                btnUpdate.setVisible(true);
+                btnDelete.setVisible(true);
+                txtArticle.setEnabled(false);
+                fillProductForm();
+                break;
+        }
+    }
+
+    private void fillProductForm() {
+        try {
+            Product product = (Product) ViewController.getInstance().getParamMap().get("PRODUCT_FORM_DETAILS");
+            txtArticle.setText(String.valueOf(product.getArticle()));
+            txtName.setText(String.valueOf(product.getName()));
+            txtDescription.setText(String.valueOf(product.getDescription()));
+            cmbCategory.setSelectedItem(product.getCategory());
+            DefaultListModel listModel = (DefaultListModel) listSelectedSizes.getModel();
+            for (Size size : product.getSizes()) {
+                listModel.addElement(size);
+            }
+            txtPriceWithoutVAT.setText(String.valueOf(product.getPriceWithoutVAT()));
+            txtPriceWithVAT.setText(String.valueOf(product.getPriceWithVAT()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Loading details failed.", "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        }
     }
    
 }

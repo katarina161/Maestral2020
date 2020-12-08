@@ -12,6 +12,7 @@ import rs.ac.bg.fon.ps.domain.User;
 import rs.ac.bg.fon.ps.exception.IncorrectPasswordException;
 import rs.ac.bg.fon.ps.exception.RequiredFieldsEmptyException;
 import rs.ac.bg.fon.ps.exception.UnknownUserException;
+import rs.ac.bg.fon.ps.view.controller.ViewController;
 
 /**
  *
@@ -132,13 +133,12 @@ public class FrmLogIn extends javax.swing.JFrame {
         try {
             String username = txtUsername.getText().trim();
             String password = String.valueOf(txtPassword.getPassword());
-            resetForm();
             validateForm(username, password);
             User user = Controller.getInstance().logIn(username, password);
             JOptionPane.showMessageDialog(this, "Welcome " +user.getFirstName(), 
                     "Success", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
-            new FrmMain().setVisible(true);
+            ViewController.getInstance().openMainForm(user);
         } catch (IncorrectPasswordException ex) {
             ex.printStackTrace();
             txtPassword.setText("");
@@ -171,6 +171,7 @@ public class FrmLogIn extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void validateForm(String username, String password) throws Exception {
+        resetForm();
         boolean errors = false;
         
         if (username == null || username.isEmpty()) {

@@ -6,10 +6,18 @@
 package rs.ac.bg.fon.ps.view.form;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import rs.ac.bg.fon.ps.controller.Controller;
+import rs.ac.bg.fon.ps.domain.Category;
 import rs.ac.bg.fon.ps.domain.Product;
+import rs.ac.bg.fon.ps.view.component.table.ProductTableModel;
+import rs.ac.bg.fon.ps.view.controller.ViewController;
 
 /**
  *
@@ -20,10 +28,16 @@ public class FrmSearchProducts extends javax.swing.JDialog {
     /**
      * Creates new form FrmViewProducts
      */
-    public FrmSearchProducts(java.awt.Frame parent, boolean modal) throws Exception {
+    public FrmSearchProducts(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        prepareForm();
+        try {
+            prepareForm();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "View initialisation failed!", "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        }
     }
 
     /**
@@ -37,9 +51,14 @@ public class FrmSearchProducts extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProducts = new javax.swing.JTable();
+        btnDelete = new javax.swing.JButton();
+        btnDetails = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Products");
 
+        tblProducts.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         tblProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -51,7 +70,38 @@ public class FrmSearchProducts extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblProducts.setRowHeight(22);
         jScrollPane1.setViewportView(tblProducts);
+
+        btnDelete.setBackground(new java.awt.Color(204, 0, 0));
+        btnDelete.setFont(new java.awt.Font("Bauhaus 93", 0, 20)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnDetails.setBackground(new java.awt.Color(2, 26, 126));
+        btnDetails.setFont(new java.awt.Font("Bauhaus 93", 0, 20)); // NOI18N
+        btnDetails.setForeground(new java.awt.Color(255, 255, 255));
+        btnDetails.setText("Details");
+        btnDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetailsActionPerformed(evt);
+            }
+        });
+
+        btnAdd.setBackground(new java.awt.Color(2, 26, 126));
+        btnAdd.setFont(new java.awt.Font("Bauhaus 93", 0, 20)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -60,37 +110,96 @@ public class FrmSearchProducts extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(268, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDetails)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int selectedRow = tblProducts.getSelectedRow();
+        if (selectedRow >= 0) {
+            int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete selected product?",
+                        "Confirm", JOptionPane.YES_NO_OPTION);
+            if (answer == 0) {
+                ProductTableModel model = (ProductTableModel) tblProducts.getModel();
+                try {
+                    //                model.deleteProduct(selectedRow);
+                    Controller.getInstance().deleteProduct(model.getProduct(selectedRow));
+                    ViewController.getInstance().refreshProductsView();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error occured. Delete product failed.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "You must select a product.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
+        int selectedRow = tblProducts.getSelectedRow();
+        if (selectedRow >= 0) {
+            ProductTableModel model = (ProductTableModel) tblProducts.getModel();
+            Product selectedProduct = model.getProduct(selectedRow);
+            ViewController.getInstance().openProductForm(selectedProduct);
+        } else {
+            JOptionPane.showMessageDialog(this, "You must select a product.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDetailsActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        ViewController.getInstance().openProductForm();
+        ViewController.getInstance().refreshProductsView();
+    }//GEN-LAST:event_btnAddActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDetails;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblProducts;
     // End of variables declaration//GEN-END:variables
 
-    private void prepareForm() {
+    private void prepareForm() throws Exception {
+        setResizable(false);
         fillTableProducts();
     }
     
-    private void fillTableProducts() {
-        String[] columnNames = new String[]{"Article", "Name", "Category", "Price"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    private void fillTableProducts() throws Exception {
         List<Product> products = Controller.getInstance().getAllProducts();
-        for (Product product : products) {
-            Object[] rowData = new Object[]{product.getArticle(), product.getName(), product.getCategory(), product.getPriceWithVAT()};
-            model.addRow(rowData);
-        }
+        ProductTableModel model = new ProductTableModel(products);
         tblProducts.setModel(model);
+        
+        List<Category> categories = Controller.getInstance().getAllCategories();
+        JComboBox cbCategories = new JComboBox(categories.toArray());
+        
+        TableColumn tc = tblProducts.getColumnModel().getColumn(2);
+        tc.setCellEditor(new DefaultCellEditor(cbCategories));
+    }
+
+    public void refreshProductData() {
+        ((ProductTableModel)tblProducts.getModel()).refresh();
     }
 }
