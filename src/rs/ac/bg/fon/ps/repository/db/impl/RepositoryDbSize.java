@@ -29,7 +29,7 @@ public class RepositoryDbSize implements DbRepository<Size, Long> {
     public List<Size> getAll() throws Exception {
         List<Size> sizes = new ArrayList<>();
         
-        String query = "SELECT id, size_number FROM size";
+        String query = "SELECT id, number FROM size";
         Connection connection = DbConnectionFactory.getInstance().getConnection();
         Statement statement = connection.createStatement();
         
@@ -37,7 +37,7 @@ public class RepositoryDbSize implements DbRepository<Size, Long> {
         while (rs.next()) {            
             Size size = new Size();
             size.setId(rs.getLong("id"));
-            size.setSizeNumber(rs.getInt("size_number"));
+            size.setSizeNumber(rs.getInt("number"));
             sizes.add(size);
         }
         rs.close();

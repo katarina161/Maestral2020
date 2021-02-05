@@ -5,12 +5,9 @@
  */
 package rs.ac.bg.fon.ps.view.form;
 
-import java.awt.Color;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
+import java.awt.event.ActionListener;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
-import rs.ac.bg.fon.ps.controller.Controller;
-import rs.ac.bg.fon.ps.view.controller.ViewController;
 
 /**
  *
@@ -23,7 +20,6 @@ public class FrmMain extends javax.swing.JFrame {
      */
     public FrmMain() {
         initComponents();
-        prepareForm();
     }
 
     /**
@@ -62,22 +58,12 @@ public class FrmMain extends javax.swing.JFrame {
         miProductNew.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         miProductNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/plus.png"))); // NOI18N
         miProductNew.setText("New");
-        miProductNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miProductNewActionPerformed(evt);
-            }
-        });
         menuProduct.add(miProductNew);
 
         miProductSearch.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         miProductSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         miProductSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/search.png"))); // NOI18N
         miProductSearch.setText("Search");
-        miProductSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miProductSearchActionPerformed(evt);
-            }
-        });
         menuProduct.add(miProductSearch);
 
         menuMain.add(menuProduct);
@@ -124,14 +110,10 @@ public class FrmMain extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void miProductNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductNewActionPerformed
-        ViewController.getInstance().openProductForm();
-    }//GEN-LAST:event_miProductNewActionPerformed
-
     private void miLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogOutActionPerformed
         try {
             this.dispose();
-            ViewController.getInstance().logOUt();
+//            ViewController.getInstance().logOUt();
             JOptionPane.showMessageDialog(this, "You've been successfully logged out.", "Log out", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,18 +121,6 @@ public class FrmMain extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_miLogOutActionPerformed
-
-    private void miProductSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProductSearchActionPerformed
-        ViewController.getInstance().openSearchProductsForm();
-    }//GEN-LAST:event_miProductSearchActionPerformed
-
-    private void prepareForm() {
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setLocationRelativeTo(null);
-        getContentPane().setBackground(Color.WHITE);
-        menuUser.setText(ViewController.getInstance().getCurrentUser().getUsername());
-    }
-    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -163,4 +133,16 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem miProductNew;
     private javax.swing.JMenuItem miProductSearch;
     // End of variables declaration//GEN-END:variables
+
+    public JMenu getMenuUser() {
+        return menuUser;
+    }
+
+    public void jmiProductNewAddActionListener(ActionListener actionListener) {
+        miProductNew.addActionListener(actionListener);
+    }
+
+    public void jmiProductSearchAddActionListener(ActionListener actionListener) {
+        miProductSearch.addActionListener(actionListener);
+    }
 }

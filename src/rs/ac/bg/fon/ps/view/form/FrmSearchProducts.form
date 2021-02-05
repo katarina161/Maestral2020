@@ -96,9 +96,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Delete"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnDetails">
       <Properties>
@@ -113,9 +110,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Details"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDetailsActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnAdd">
       <Properties>
@@ -130,9 +124,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Add"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

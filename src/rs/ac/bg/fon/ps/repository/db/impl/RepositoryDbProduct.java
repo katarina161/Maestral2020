@@ -28,7 +28,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
     public void add(Product param) throws Exception {
         Connection connection = DbConnectionFactory.getInstance().getConnection();
         try {
-            String query = "INSERT INTO product (article, name, category_id, description, price, price_vat) VALUES (?,?,?,?,?,?)";
+            String query = "INSERT INTO product (article, name, category_id, description, price, price_with_vat) VALUES (?,?,?,?,?,?)";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setLong(1, param.getArticle());
             ps.setString(2, param.getName());
@@ -53,7 +53,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
     public List<Product> getAll() throws Exception {
         List<Product> products = new ArrayList<>();
         
-        String query = "SELECT p.article, p.name, p.description, p.price, p.price_vat, c.id, c.name"
+        String query = "SELECT p.article, p.name, p.description, p.price, p.price_with_vat, c.id, c.name"
                 + " FROM product p JOIN category c ON p.category_id = c.id";
         Connection connection = DbConnectionFactory.getInstance().getConnection();
         Statement statement = connection.createStatement();
@@ -70,7 +70,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
             product.setDescription(rs.getString("p.description"));
             product.setCategory(category);
             product.setPriceWithoutVAT(new BigDecimal(rs.getDouble("p.price")));
-            product.setPriceWithVAT(new BigDecimal(rs.getDouble("p.price_vat")));
+            product.setPriceWithVAT(new BigDecimal(rs.getDouble("p.price_with_vat")));
             product.setSizes(getProductSizes(product));
             products.add(product);
         }
@@ -84,7 +84,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
     public void update(Product param) throws Exception {
         Connection connection = DbConnectionFactory.getInstance().getConnection();
         try {
-           String query = "UPDATE product SET name=?, description=?, category_id=?, price=?, price_vat=? WHERE article=?"; 
+           String query = "UPDATE product SET name=?, description=?, category_id=?, price=?, price_with_vat=? WHERE article=?"; 
            PreparedStatement ps = connection.prepareStatement(query);
            ps.setString(1, param.getName());
            ps.setString(2, param.getDescription());
@@ -94,6 +94,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
            ps.setLong(6, param.getArticle());
            
            updateProductSizes(param);
+           ps.executeUpdate();
            connection.commit();
            ps.close();
            
@@ -131,9 +132,9 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
     private List<Size> getProductSizes(Product product) throws Exception {
         List<Size> sizes = new ArrayList<>();
         
-        String query = "SELECT s.id, s.size_number "
+        String query = "SELECT s.id, s.number "
                 + "FROM product_size p JOIN size s ON p.size_id = s.id "
-                + "WHERE p.product_id = ?";
+                + "WHERE p.product_article = ?";
         Connection connection = DbConnectionFactory.getInstance().getConnection();
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setLong(1, product.getArticle());
@@ -142,7 +143,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
         while (rs.next()) {            
             Size s = new Size();
             s.setId(rs.getLong("s.id"));
-            s.setSizeNumber(rs.getInt("s.size_number"));
+            s.setSizeNumber(rs.getInt("s.number"));
             sizes.add(s);
         }
         rs.close();
@@ -153,7 +154,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
 
     private void insertProductSizes(Product product) throws Exception {
         Connection connection = DbConnectionFactory.getInstance().getConnection();
-        String query = "INSERT INTO product_size (product_id, size_id) VALUES (?,?)";
+        String query = "INSERT INTO product_size (product_article, size_id) VALUES (?,?)";
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setLong(1, product.getArticle());
         
@@ -167,7 +168,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
     
     private void removeProductSizes(Product product, Size size) throws Exception {
         Connection connection = DbConnectionFactory.getInstance().getConnection();
-        String query = "DELETE FROM product_size WHERE product_id=? AND size_id=?";
+        String query = "DELETE FROM product_size WHERE product_article=? AND size_id=?";
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setLong(1, product.getArticle());
         ps.setLong(2, size.getId());
@@ -189,7 +190,7 @@ public class RepositoryDbProduct implements DbRepository<Product, Long> {
         
         for (Size s : productSizes) {
             if (!dbSizes.contains(s)) {
-                String query = "INSERT INTO product_size (product_id, size_id) VALUES (?,?)";
+                String query = "INSERT INTO product_size (product_article, size_id) VALUES (?,?)";
                 PreparedStatement ps = connection.prepareStatement(query);
                 ps.setLong(1, product.getArticle());
                 ps.setLong(2, s.getId());

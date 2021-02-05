@@ -27,7 +27,7 @@ public class RepositoryDbUser implements DbRepository<User, Long>{
     public List<User> getAll() throws Exception {
         List<User> users = new ArrayList<>();
         
-        String query = "SELECT id, firstname, lastname, username, password FROM user";
+        String query = "SELECT id, first_name, last_name, username, password FROM user";
         Connection connection = DbConnectionFactory.getInstance().getConnection();
         Statement statement = connection.createStatement();
         
@@ -35,8 +35,8 @@ public class RepositoryDbUser implements DbRepository<User, Long>{
         while (rs.next()) {            
             User user = new User();
             user.setId(rs.getLong("id"));
-            user.setFirstName(rs.getString("firstname"));
-            user.setLastName(rs.getString("lastname"));
+            user.setFirstName(rs.getString("first_name"));
+            user.setLastName(rs.getString("last_name"));
             user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
             users.add(user);

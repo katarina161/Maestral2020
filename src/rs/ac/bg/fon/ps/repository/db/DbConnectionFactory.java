@@ -30,7 +30,7 @@ public class DbConnectionFactory {
         if (connection == null || connection.isClosed()) {
             String url = "jdbc:mysql://localhost:3306/maestral";
             String user = "root";
-            String password = "";
+            String password = "root";
             
             connection = DriverManager.getConnection(url, user, password);
             connection.setAutoCommit(false);

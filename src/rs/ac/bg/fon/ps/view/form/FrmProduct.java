@@ -5,23 +5,14 @@
  */
 package rs.ac.bg.fon.ps.view.form;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.ActionListener;
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-import rs.ac.bg.fon.ps.controller.Controller;
-import rs.ac.bg.fon.ps.domain.Category;
-import rs.ac.bg.fon.ps.domain.Product;
-import rs.ac.bg.fon.ps.domain.Size;
-import rs.ac.bg.fon.ps.exception.NegativePriceException;
-import rs.ac.bg.fon.ps.exception.ProductAlreadyExistException;
-import rs.ac.bg.fon.ps.exception.RequiredFieldsEmptyException;
-import rs.ac.bg.fon.ps.view.controller.ViewController;
-import rs.ac.bg.fon.ps.view.util.FormMode;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -32,18 +23,9 @@ public class FrmProduct extends javax.swing.JDialog {
     /**
      * Creates new form FrmProduct
      */
-    public FrmProduct(java.awt.Frame parent, boolean modal, FormMode formMode) {
+    public FrmProduct(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        try {
-            prepareForm(formMode);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "View initialisation failed!", "Error", JOptionPane.ERROR_MESSAGE);
-            this.dispose();
-        }
-        
-            
     }
 
     /**
@@ -125,6 +107,7 @@ public class FrmProduct extends javax.swing.JDialog {
 
         txtDescription.setColumns(20);
         txtDescription.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         jScrollPane1.setViewportView(txtDescription);
 
@@ -164,19 +147,9 @@ public class FrmProduct extends javax.swing.JDialog {
 
         btnAddSize.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         btnAddSize.setText("Add Size");
-        btnAddSize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddSizeActionPerformed(evt);
-            }
-        });
 
         btnRemoveSize.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         btnRemoveSize.setText("Remove Size");
-        btnRemoveSize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveSizeActionPerformed(evt);
-            }
-        });
 
         lblArticleError.setForeground(new java.awt.Color(229, 10, 10));
 
@@ -194,11 +167,6 @@ public class FrmProduct extends javax.swing.JDialog {
         txtVATPercentage.setText("20");
 
         btnCalculatePriceWithVAT.setText("Calculate");
-        btnCalculatePriceWithVAT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCalculatePriceWithVATActionPerformed(evt);
-            }
-        });
 
         lblCategoryError.setForeground(new java.awt.Color(229, 10, 10));
 
@@ -355,51 +323,26 @@ public class FrmProduct extends javax.swing.JDialog {
         btnSave.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
         btnSave.setForeground(new java.awt.Color(255, 255, 255));
         btnSave.setText("Save");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
 
         btnReset.setBackground(new java.awt.Color(2, 26, 126));
         btnReset.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
         btnReset.setForeground(new java.awt.Color(255, 255, 255));
         btnReset.setText("Reset");
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetActionPerformed(evt);
-            }
-        });
 
         btnRevert.setBackground(new java.awt.Color(2, 26, 126));
         btnRevert.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
         btnRevert.setForeground(new java.awt.Color(255, 255, 255));
         btnRevert.setText("Revert");
-        btnRevert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRevertActionPerformed(evt);
-            }
-        });
 
         btnUpdate.setBackground(new java.awt.Color(2, 26, 126));
         btnUpdate.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
 
         btnDelete.setBackground(new java.awt.Color(204, 0, 0));
         btnDelete.setFont(new java.awt.Font("Bauhaus 93", 1, 24)); // NOI18N
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -441,123 +384,10 @@ public class FrmProduct extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        resetForm();
-    }//GEN-LAST:event_btnResetActionPerformed
-
-    private void btnAddSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSizeActionPerformed
-        DefaultListModel listModel = (DefaultListModel) listSelectedSizes.getModel();
-        List<Object> selectedSizes = getSelectedSizes();
-        if (!selectedSizes.contains(cmbSize.getSelectedItem())) {
-            listModel.addElement(cmbSize.getSelectedItem());
-        }
-    }//GEN-LAST:event_btnAddSizeActionPerformed
-
-    private void btnRemoveSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSizeActionPerformed
-        DefaultListModel listModel = (DefaultListModel) listSelectedSizes.getModel();
-        List<Object> selectedSizes = listSelectedSizes.getSelectedValuesList();
-        for (Object selectedSize : selectedSizes) {
-            listModel.removeElement(selectedSize);
-        }
-        
-    }//GEN-LAST:event_btnRemoveSizeActionPerformed
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        try {
-            validateForm();
-            calculatePriceWithVAT();
-            Product product = new Product();
-            product.setArticle(Long.parseLong(txtArticle.getText().trim()));
-            product.setName(txtName.getText().trim());
-            product.setDescription(txtDescription.getText().trim());
-            product.setCategory((Category) cmbCategory.getSelectedItem());
-            product.setSizes((List<Size>)(List<?>) getSelectedSizes());
-            product.setPriceWithoutVAT(new BigDecimal(txtPriceWithoutVAT.getText().trim()));
-            product.setPriceWithVAT(new BigDecimal(txtPriceWithVAT.getText().trim()));
-            Controller.getInstance().addProduct(product);
-            resetForm();
-            JOptionPane.showMessageDialog(this, "Product successfully saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } catch (RequiredFieldsEmptyException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Please fill out all of the required fields.", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (ProductAlreadyExistException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Product already exist.", "Insert Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error occured. Save product failed.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnSaveActionPerformed
-
     private void txtPriceWithoutVATActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPriceWithoutVATActionPerformed
-        calculatePriceWithVAT();
+//        calculatePriceWithVAT();
     }//GEN-LAST:event_txtPriceWithoutVATActionPerformed
 
-    private void btnCalculatePriceWithVATActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculatePriceWithVATActionPerformed
-        calculatePriceWithVAT(); 
-    }//GEN-LAST:event_btnCalculatePriceWithVATActionPerformed
-
-    private void btnRevertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevertActionPerformed
-        resetForm();
-        fillProductForm();
-    }//GEN-LAST:event_btnRevertActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        try {
-            validateForm();
-            calculatePriceWithVAT();
-            Product product = new Product();
-            product.setArticle(Long.parseLong(txtArticle.getText().trim()));
-            product.setName(txtName.getText().trim());
-            product.setDescription(txtDescription.getText().trim());
-            product.setCategory((Category) cmbCategory.getSelectedItem());
-            product.setSizes((List<Size>)(List<?>) getSelectedSizes());
-            product.setPriceWithoutVAT(new BigDecimal(txtPriceWithoutVAT.getText().trim()));
-            product.setPriceWithVAT(new BigDecimal(txtPriceWithVAT.getText().trim()));
-            Controller.getInstance().updateProduct(product);
-            ViewController.getInstance().refreshProductsView();
-            JOptionPane.showMessageDialog(this, "Product successfully updates!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } catch (RequiredFieldsEmptyException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Please fill out all of the required fields.", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error occured. Update product failed.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this product?",
-                        "Confirm", JOptionPane.YES_NO_OPTION);
-        if (answer == 0) {
-            try {
-                Product product = new Product();
-                product.setArticle(Long.parseLong(txtArticle.getText().trim()));
-                product.setName(txtName.getText().trim());
-                product.setDescription(txtDescription.getText().trim());
-                product.setCategory((Category) cmbCategory.getSelectedItem());
-                product.setSizes((List<Size>)(List<?>) getSelectedSizes());
-                product.setPriceWithoutVAT(new BigDecimal(txtPriceWithoutVAT.getText().trim()));
-                product.setPriceWithVAT(new BigDecimal(txtPriceWithVAT.getText().trim()));
-                Controller.getInstance().deleteProduct(product);
-                JOptionPane.showMessageDialog(this, "Product successfully deleted!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
-                ViewController.getInstance().refreshProductsView();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error occured. Delete product failed.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void prepareForm(FormMode formMode) throws Exception {
-        setResizable(false);
-        fillCmbCategory();
-        fillCmbSize();
-        
-        setupForm(formMode);
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSize;
@@ -596,150 +426,125 @@ public class FrmProduct extends javax.swing.JDialog {
     private javax.swing.JTextField txtVATPercentage;
     // End of variables declaration//GEN-END:variables
 
-    private void fillCmbCategory() throws Exception {
-        cmbCategory.removeAllItems();
-        List<Category> categories = Controller.getInstance().getAllCategories();
-        for (Category category : categories) {
-            cmbCategory.addItem(category);
-        }
-        cmbCategory.setSelectedIndex(-1);
+    public JComboBox<Object> getCmbCategory() {
+        return cmbCategory;
     }
 
-    private void fillCmbSize() throws Exception {
-        cmbSize.removeAllItems();
-        List<Size> sizes = Controller.getInstance().getAllSizes();
-        for (Size size : sizes) {
-            cmbSize.addItem(size);
-        }
+    public JComboBox<Object> getCmbSize() {
+        return cmbSize;
+    }
+
+    public JButton getBtnAddSize() {
+        return btnAddSize;
+    }
+
+    public JButton getBtnCalculatePriceWithVAT() {
+        return btnCalculatePriceWithVAT;
+    }
+
+    public JButton getBtnDelete() {
+        return btnDelete;
+    }
+
+    public JButton getBtnRemoveSize() {
+        return btnRemoveSize;
+    }
+
+    public JButton getBtnReset() {
+        return btnReset;
+    }
+
+    public JButton getBtnRevert() {
+        return btnRevert;
+    }
+
+    public JButton getBtnSave() {
+        return btnSave;
+    }
+
+    public JButton getBtnUpdate() {
+        return btnUpdate;
+    }
+
+    public JTextField getTxtArticle() {
+        return txtArticle;
+    }
+
+    public JTextArea getTxtDescription() {
+        return txtDescription;
+    }
+
+    public JTextField getTxtName() {
+        return txtName;
+    }
+
+    public JTextField getTxtPriceWithVAT() {
+        return txtPriceWithVAT;
+    }
+
+    public JTextField getTxtPriceWithoutVAT() {
+        return txtPriceWithoutVAT;
+    }
+
+    public JTextField getTxtVATPercentage() {
+        return txtVATPercentage;
+    }
+
+    public JList<Object> getListSelectedSizes() {
+        return listSelectedSizes;
+    }
+
+    public JLabel getLblArticleError() {
+        return lblArticleError;
+    }
+
+    public JLabel getLblCategoryError() {
+        return lblCategoryError;
+    }
+
+    public JLabel getLblNameError() {
+        return lblNameError;
+    }
+
+    public JLabel getLblPriceWithoutWatError() {
+        return lblPriceWithoutWatError;
+    }
+
+    public JLabel getLblSizeError() {
+        return lblSizeError;
     }
     
-    private void resetErrors() {
-        lblArticleError.setText("");
-        lblNameError.setText("");
-        lblCategoryError.setText("");
-        lblSizeError.setText("");
-        lblPriceWithoutWatError.setText("");
-    }
-    
-    private void resetForm() {
-        resetErrors();
-        txtArticle.setText("");
-        txtName.setText("");
-        txtDescription.setText("");
-        cmbCategory.setSelectedIndex(-1);
-        txtPriceWithoutVAT.setText("");
-        txtPriceWithVAT.setText("");
-        
-        DefaultListModel listModel = (DefaultListModel) listSelectedSizes.getModel();
-        listModel.removeAllElements();
-    }
-    
-    private List<Object> getSelectedSizes() {
-        List<Object> selectedSizes = new ArrayList<>();
-        for (int i = 0; i < listSelectedSizes.getModel().getSize(); i++) {
-            selectedSizes.add(listSelectedSizes.getModel().getElementAt(i));
-        }
-        
-        return selectedSizes;
+
+    public void btnSaveAddActionListener(ActionListener actionListener) {
+        btnSave.addActionListener(actionListener);
     }
 
-    private void validateForm() throws RequiredFieldsEmptyException {
-        resetErrors();
-        boolean errors = false;
-        
-        if (txtArticle.getText() == null || txtArticle.getText().isEmpty()) {
-            lblArticleError.setText("Required!");
-            errors = true;
-        }
-        if (txtName.getText() == null || txtName.getText().isEmpty()) {
-            lblNameError.setText("Required!");
-            errors = true;
-        }
-        if (cmbCategory.getSelectedIndex() == -1) {
-            lblCategoryError.setText("Required!");
-            errors = true;
-        }
-        if (getSelectedSizes() == null || getSelectedSizes().isEmpty()) {
-            lblSizeError.setText("Required!");
-            errors = true;
-        }
-        if (txtPriceWithoutVAT.getText() == null || txtPriceWithoutVAT.getText().isEmpty()) {
-            lblPriceWithoutWatError.setText("Required!");
-            errors = true;
-        }
-        
-        if (errors) {
-            throw new RequiredFieldsEmptyException("Required fields can not be empty.");
-        }
-        
+    public void btnCalculatePriceWithVATAddActionListener(ActionListener actionListener) {
+        btnCalculatePriceWithVAT.addActionListener(actionListener);
     }
 
-    private void validatePrice() throws Exception{
-        double priceWithout = Double.parseDouble(txtPriceWithoutVAT.getText().trim());
-        if (priceWithout <= 0) {
-            throw new NegativePriceException("Price must be a natural number!");
-        }
-        
-    }
-    
-    private void calculatePriceWithVAT() {
-        try {
-            validatePrice();
-            double priceWithout = Double.parseDouble(txtPriceWithoutVAT.getText().trim());
-            int VATpercentage = Integer.parseInt(txtVATPercentage.getText().trim());
-            double priceWith = 
-                new BigDecimal(priceWithout * (1 + VATpercentage / 100.00)).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            txtPriceWithVAT.setText(String.valueOf(priceWith));
-        } catch (NumberFormatException | NegativePriceException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Price and VAT percentage must be a positive number!", "Price Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            Logger.getLogger(FrmProduct.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+    public void btnRevertAddActionListener(ActionListener actionListener) {
+        btnRevert.addActionListener(actionListener);
     }
 
-    private void setupForm(FormMode formMode) {
-        switch(formMode) {
-            case FORM_ADD:
-                this.setTitle("Add new Product");
-                btnSave.setVisible(true);
-                btnReset.setVisible(true);
-                btnRevert.setVisible(false);
-                btnUpdate.setVisible(false);
-                btnDelete.setVisible(false);
-                break;
-            case FORM_DETAIL:
-                this.setTitle("Update Product");
-                btnSave.setVisible(false);
-                btnReset.setVisible(false);
-                btnRevert.setVisible(true);
-                btnUpdate.setVisible(true);
-                btnDelete.setVisible(true);
-                txtArticle.setEnabled(false);
-                fillProductForm();
-                break;
-        }
+    public void btnUpdateAddActionListener(ActionListener actionListener) {
+        btnUpdate.addActionListener(actionListener);
     }
 
-    private void fillProductForm() {
-        try {
-            Product product = (Product) ViewController.getInstance().getParamMap().get("PRODUCT_FORM_DETAILS");
-            txtArticle.setText(String.valueOf(product.getArticle()));
-            txtName.setText(String.valueOf(product.getName()));
-            txtDescription.setText(String.valueOf(product.getDescription()));
-            cmbCategory.setSelectedItem(product.getCategory());
-            DefaultListModel listModel = (DefaultListModel) listSelectedSizes.getModel();
-            for (Size size : product.getSizes()) {
-                listModel.addElement(size);
-            }
-            txtPriceWithoutVAT.setText(String.valueOf(product.getPriceWithoutVAT()));
-            txtPriceWithVAT.setText(String.valueOf(product.getPriceWithVAT()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Loading details failed.", "Error", JOptionPane.ERROR_MESSAGE);
-            this.dispose();
-        }
+    public void btnDeleteAddActionListener(ActionListener actionListener) {
+        btnDelete.addActionListener(actionListener);
+    }
+
+    public void btnResetAddActionListener(ActionListener actionListener) {
+        btnReset.addActionListener(actionListener);
+    }
+
+    public void btnAddSizeAddActionListener(ActionListener actionListener) {
+        btnAddSize.addActionListener(actionListener);
+    }
+
+    public void btnRemoveSizeAddActionListener(ActionListener actionListener) {
+        btnRemoveSize.addActionListener(actionListener);
     }
    
 }

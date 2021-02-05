@@ -72,21 +72,22 @@ public class ProductTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex == 1 || columnIndex == 2;
+//        return columnIndex == 1 || columnIndex == 2;
+        return false;
     }
 
-    @Override
-    public void setValueAt(Object value, int rowIndex, int columnIndex) {
-        Product product = products.get(rowIndex);
-        switch (columnIndex) {
-            case 1:
-                product.setName(value.toString());
-                break;
-            case 2:
-                product.setCategory((Category)value);
-                break;
-        }
-    }
+//    @Override
+//    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+//        Product product = products.get(rowIndex);
+//        switch (columnIndex) {
+//            case 1:
+//                product.setName(value.toString());
+//                break;
+//            case 2:
+//                product.setCategory((Category)value);
+//                break;
+//        }
+//    }
 
     public void deleteProduct(int selectedRow) {
         products.remove(selectedRow);

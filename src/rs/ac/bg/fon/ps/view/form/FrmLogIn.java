@@ -6,13 +6,11 @@
 package rs.ac.bg.fon.ps.view.form;
 
 import java.awt.Color;
-import javax.swing.JOptionPane;
-import rs.ac.bg.fon.ps.controller.Controller;
-import rs.ac.bg.fon.ps.domain.User;
-import rs.ac.bg.fon.ps.exception.IncorrectPasswordException;
-import rs.ac.bg.fon.ps.exception.RequiredFieldsEmptyException;
-import rs.ac.bg.fon.ps.exception.UnknownUserException;
-import rs.ac.bg.fon.ps.view.controller.ViewController;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 /**
  *
@@ -25,7 +23,6 @@ public class FrmLogIn extends javax.swing.JFrame {
      */
     public FrmLogIn() {
         initComponents();
-        prepareForm();
     }
 
     /**
@@ -68,11 +65,6 @@ public class FrmLogIn extends javax.swing.JFrame {
         btnLogIn.setFont(new java.awt.Font("Tahoma", 1, 25)); // NOI18N
         btnLogIn.setForeground(new java.awt.Color(255, 255, 255));
         btnLogIn.setText("Log in");
-        btnLogIn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogInActionPerformed(evt);
-            }
-        });
 
         lblPasswordError.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblPasswordError.setForeground(new java.awt.Color(229, 10, 10));
@@ -122,41 +114,13 @@ public class FrmLogIn extends javax.swing.JFrame {
                         .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(1, 1, 1)))
                 .addGap(44, 44, 44)
-                .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addComponent(btnLogIn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-        try {
-            String username = txtUsername.getText().trim();
-            String password = String.valueOf(txtPassword.getPassword());
-            validateForm(username, password);
-            User user = Controller.getInstance().logIn(username, password);
-            JOptionPane.showMessageDialog(this, "Welcome " +user.getFirstName(), 
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-            ViewController.getInstance().openMainForm(user);
-        } catch (IncorrectPasswordException ex) {
-            ex.printStackTrace();
-            txtPassword.setText("");
-            JOptionPane.showMessageDialog(this, "Incorrect password.", "Log in Error", JOptionPane.ERROR_MESSAGE);
-        } catch (UnknownUserException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Such user does not exist in the system.", "Log in Error", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_btnLogInActionPerformed
-
-    private void prepareForm() {
-        setLocationRelativeTo(null);
-        this.setResizable(false);
-        getContentPane().setBackground(Color.WHITE);
-        getRootPane().setDefaultButton(btnLogIn);
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -170,26 +134,29 @@ public class FrmLogIn extends javax.swing.JFrame {
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    private void validateForm(String username, String password) throws Exception {
-        resetForm();
-        boolean errors = false;
-        
-        if (username == null || username.isEmpty()) {
-            lblUsernameError.setText("Username can not be empty.");
-            errors = true;
-        }
-        if (password == null || password.isEmpty()) {
-            lblPasswordError.setText("Passord can not be empty.");
-            errors = true;
-        }
-        
-        if (errors) {
-            throw new RequiredFieldsEmptyException("Username and/or password are empty.");
-        }
+
+    public void logInAddActionListener(ActionListener actionListener) {
+        btnLogIn.addActionListener(actionListener);
     }
 
-    private void resetForm() {
-        lblUsernameError.setText("");
-        lblPasswordError.setText("");
+    public JTextField getTxtUsername() {
+        return txtUsername;
     }
+
+    public JPasswordField getTxtPassword() {
+        return txtPassword;
+    }
+
+    public JLabel getLblPasswordError() {
+        return lblPasswordError;
+    }
+
+    public JLabel getLblUsernameError() {
+        return lblUsernameError;
+    }
+
+    public JButton getBtnLogIn() {
+        return btnLogIn;
+    }
+    
 }

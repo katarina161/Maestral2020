@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rs.ac.bg.fon.ps.main;
-
-import rs.ac.bg.fon.ps.view.cordinator.MainCordinator;
+package rs.ac.bg.fon.ps.view.constant;
 
 /**
  *
  * @author Katarina
  */
-public class Main {
+public class Constants {
     
-    public static void main(String[] args) {
-        MainCordinator.getInstance().openLogInForm();
-    }
+    public static final String PARAM_CURRENT_USER = "CURRENT_USER";
+    public static final String PARAM_PRODUCT = "PRODUCT";
     
 }
