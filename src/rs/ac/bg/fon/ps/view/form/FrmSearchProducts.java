@@ -6,20 +6,8 @@
 package rs.ac.bg.fon.ps.view.form;
 
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import rs.ac.bg.fon.ps.controller.Controller;
-import rs.ac.bg.fon.ps.domain.Category;
-import rs.ac.bg.fon.ps.domain.Product;
 import rs.ac.bg.fon.ps.view.component.table.ProductTableModel;
-import rs.ac.bg.fon.ps.view.controller.ViewController;
 
 /**
  *
@@ -125,10 +113,6 @@ public class FrmSearchProducts extends javax.swing.JDialog {
     private javax.swing.JTable tblProducts;
     // End of variables declaration//GEN-END:variables
 
-
-    public void refreshProductData() {
-        ((ProductTableModel)tblProducts.getModel()).refresh();
-    }
 
     public JTable getTblProducts() {
         return tblProducts;

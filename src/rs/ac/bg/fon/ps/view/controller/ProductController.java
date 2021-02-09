@@ -8,8 +8,12 @@ package rs.ac.bg.fon.ps.view.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,13 +57,13 @@ public class ProductController {
             private void save() {
                 try {
                     validateForm();
-                    calculatePriceWithVAT();
 
                     Product product = makeProductFromForm();
                     Controller.getInstance().addProduct(product);
 
                     resetForm();
                     JOptionPane.showMessageDialog(frmProduct, "Product successfully saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    MainCordinator.getInstance().refreshProductsView();
                 } catch (RequiredFieldsEmptyException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(frmProduct, "Please fill out all of the required fields.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -97,11 +101,11 @@ public class ProductController {
             private void update() {
                 try {
                     validateForm();
-                    calculatePriceWithVAT();
 
                     Product product = makeProductFromForm();
 
                     Controller.getInstance().updateProduct(product);
+                    MainCordinator.getInstance().refreshProductsView();
 
                     JOptionPane.showMessageDialog(frmProduct, "Product successfully updates!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } catch (RequiredFieldsEmptyException ex) {
@@ -128,6 +132,7 @@ public class ProductController {
                         Product product = makeProductFromForm();
 
                         Controller.getInstance().deleteProduct(product);
+                        MainCordinator.getInstance().refreshProductsView();
 
                         JOptionPane.showMessageDialog(frmProduct, "Product successfully deleted!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         frmProduct.dispose();
@@ -185,7 +190,7 @@ public class ProductController {
             frmProduct.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(parent, "View initialisation failed!", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frmProduct, "View initialisation failed!", "Error", JOptionPane.ERROR_MESSAGE);
             frmProduct.dispose();
         }
     }
@@ -244,11 +249,20 @@ public class ProductController {
         frmProduct.getTxtDescription().setText(String.valueOf(product.getDescription()));
         frmProduct.getCmbCategory().setSelectedItem(product.getCategory());
         DefaultListModel listModel = (DefaultListModel) frmProduct.getListSelectedSizes().getModel();
-        for (Size size : product.getSizes()) {
+        
+        List<Size> sizes = product.getSizes();
+        Collections.sort(sizes, new Comparator<Size>() {
+            @Override
+            public int compare(Size o1, Size o2) {
+                return Integer.compare(o1.getSizeNumber(), o2.getSizeNumber());
+            }
+        });
+        for (Size size : sizes) {
             listModel.addElement(size);
         }
-        frmProduct.getTxtPriceWithoutVAT().setText(String.valueOf(product.getPriceWithoutVAT()));
-        frmProduct.getTxtPriceWithVAT().setText(String.valueOf(product.getPriceWithVAT()));
+        
+        frmProduct.getTxtPriceWithoutVAT().setText(String.valueOf(product.getPriceWithoutVAT().setScale(2, RoundingMode.HALF_UP).doubleValue()));
+        frmProduct.getTxtPriceWithVAT().setText(String.valueOf(product.getPriceWithVAT().setScale(2, RoundingMode.HALF_UP).doubleValue()));
     }
 
     private Product makeProductFromForm() {
@@ -259,7 +273,7 @@ public class ProductController {
         product.setCategory((Category) frmProduct.getCmbCategory().getSelectedItem());
         product.setSizes(getSelectedSizes());
         product.setPriceWithoutVAT(new BigDecimal(frmProduct.getTxtPriceWithoutVAT().getText().trim()));
-        product.setPriceWithVAT(new BigDecimal(frmProduct.getTxtPriceWithVAT().getText().trim()));
+        product.setPriceWithVAT(calculatePriceWithVAT().round(new MathContext(4)));
 
         return product;
     }
@@ -325,19 +339,26 @@ public class ProductController {
 
     }
 
-    private void calculatePriceWithVAT() {
+    private BigDecimal calculatePriceWithVAT() {
         try {
             validatePrice();
             double priceWithout = Double.parseDouble(frmProduct.getTxtPriceWithoutVAT().getText().trim());
             int VATpercentage = Integer.parseInt(frmProduct.getTxtVATPercentage().getText().trim());
-            double priceWith
-                    = new BigDecimal(priceWithout * (1 + VATpercentage / 100.00)).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            frmProduct.getTxtPriceWithVAT().setText(String.valueOf(priceWith));
+            BigDecimal priceWith = new BigDecimal(priceWithout * (1 + VATpercentage / 100.00));
+            frmProduct.getTxtPriceWithVAT().setText(String.valueOf(priceWith.setScale(2, RoundingMode.HALF_UP).doubleValue()));
+            return priceWith;
+//            double priceWithout = Double.parseDouble(frmProduct.getTxtPriceWithoutVAT().getText().trim());
+//            int VATpercentage = Integer.parseInt(frmProduct.getTxtVATPercentage().getText().trim());
+//            double priceWith
+//                    = new BigDecimal(priceWithout * (1 + VATpercentage / 100.00)).setScale(2, RoundingMode.HALF_UP).doubleValue();
+//            frmProduct.getTxtPriceWithVAT().setText(String.valueOf(priceWith));
         } catch (NumberFormatException | NegativePriceException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(frmProduct, "Price and VAT percentage must be a positive number!", "Price Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         } catch (Exception ex) {
             Logger.getLogger(FrmProduct.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 

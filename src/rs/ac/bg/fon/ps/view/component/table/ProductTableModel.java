@@ -6,8 +6,10 @@
 package rs.ac.bg.fon.ps.view.component.table;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import rs.ac.bg.fon.ps.controller.Controller;
 import rs.ac.bg.fon.ps.domain.Category;
 import rs.ac.bg.fon.ps.domain.Product;
 
@@ -16,9 +18,9 @@ import rs.ac.bg.fon.ps.domain.Product;
  * @author Katarina
  */
 public class ProductTableModel extends AbstractTableModel {
-    private String[] columnNames = new String[]{"Article", "Name", "Category", "Price"};
-    private Class[] columnClasses = new Class[]{Long.class, String.class, Category.class, BigDecimal.class};
-    private final List<Product> products;
+    private final String[] columnNames = new String[]{"Article", "Name", "Category", "Price"};
+    private final Class[] columnClasses = new Class[]{Long.class, String.class, Category.class, BigDecimal.class};
+    private List<Product> products;
 
     public ProductTableModel(List<Product> products) {
         this.products = products;
@@ -64,7 +66,7 @@ public class ProductTableModel extends AbstractTableModel {
             case 2:
                 return product.getCategory();
             case 3:
-                return product.getPriceWithVAT();
+                return product.getPriceWithVAT().setScale(2, RoundingMode.HALF_UP).doubleValue();
             default:
                 return "N/A";
         }
@@ -98,7 +100,8 @@ public class ProductTableModel extends AbstractTableModel {
         return products.get(selectedRow);
     }
 
-    public void refresh() {
+    public void refresh(List<Product> products) {
+        this.products = products;
         fireTableDataChanged();
     }
     

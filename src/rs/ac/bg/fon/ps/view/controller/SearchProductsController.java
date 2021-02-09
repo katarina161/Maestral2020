@@ -8,6 +8,8 @@ package rs.ac.bg.fon.ps.view.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -52,6 +54,7 @@ public class SearchProductsController {
                         ProductTableModel model = (ProductTableModel) frmSearchProducts.getTblProducts().getModel();
                         try {
                             Controller.getInstance().deleteProduct(model.getProduct(selectedRow));
+                            refreshProductsView();
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(frmSearchProducts, "Error occured. Delete product failed.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -121,6 +124,15 @@ public class SearchProductsController {
 
         TableColumn tc = frmSearchProducts.getTblProducts().getColumnModel().getColumn(2);
         tc.setCellEditor(new DefaultCellEditor(cbCategories));
+    }
+
+    public void refreshProductsView() {
+        try {
+            ProductTableModel model = (ProductTableModel) frmSearchProducts.getTblProducts().getModel();
+            model.refresh(Controller.getInstance().getAllProducts());
+        } catch (Exception ex) {
+            Logger.getLogger(SearchProductsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

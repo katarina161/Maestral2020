@@ -11,13 +11,9 @@ import java.util.List;
  *
  * @author Katarina
  */
-public interface Repository <T, K> {
-    public void connect() throws Exception;
-    public void disconnect() throws Exception;
+public interface Repository <T> {
     public void add(T param) throws Exception;
     public List<T> getAll() throws Exception;
     public void update(T param) throws Exception;
     public void delete(T param) throws  Exception;
-    public T get(K id) throws Exception;
-    
 }

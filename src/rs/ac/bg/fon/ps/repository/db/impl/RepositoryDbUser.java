@@ -18,7 +18,7 @@ import rs.ac.bg.fon.ps.repository.db.DbRepository;
  *
  * @author Katarina
  */
-public class RepositoryDbUser implements DbRepository<User, Long>{
+public class RepositoryDbUser implements DbRepository<User>{
 
     public RepositoryDbUser() {
     }
@@ -59,11 +59,6 @@ public class RepositoryDbUser implements DbRepository<User, Long>{
 
     @Override
     public void delete(User param) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public User get(Long id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -7,6 +7,7 @@ package rs.ac.bg.fon.ps.view.controller;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import rs.ac.bg.fon.ps.domain.User;
 import rs.ac.bg.fon.ps.view.constant.Constants;
@@ -34,9 +35,9 @@ public class MainController {
     }
 
     private void addActionListener() {
-        frmMain.jmiProductNewAddActionListener(new java.awt.event.ActionListener() {
+        frmMain.jmiProductNewAddActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jmiProductNewActionPerformed(evt);
             }
 
@@ -45,14 +46,35 @@ public class MainController {
             }
         });
         
-        frmMain.jmiProductSearchAddActionListener(new java.awt.event.ActionListener() {
+        frmMain.jmiProductSearchAddActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 jmiProductSearchActionPerformed(e);
             }
 
             private void jmiProductSearchActionPerformed(ActionEvent e) {
                 MainCordinator.getInstance().openViewAllProductsForm();
+            }
+        });
+        
+        frmMain.jmiLogOutAddActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logOut();
+            }
+
+            private void logOut() {
+                MainCordinator.getInstance().addParam(Constants.PARAM_CURRENT_USER, null);
+                MainCordinator.getInstance().addParam(Constants.PARAM_PRODUCT, null);
+                frmMain.dispose();
+                MainCordinator.getInstance().openLogInForm();
+            }
+        });
+        
+        frmMain.jmiInvoiceNewAddActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainCordinator.getInstance().openAddNewInvoiceForm();
             }
         });
     }

@@ -13,6 +13,7 @@ import rs.ac.bg.fon.ps.domain.User;
 import rs.ac.bg.fon.ps.exception.IncorrectPasswordException;
 import rs.ac.bg.fon.ps.exception.UnknownUserException;
 import rs.ac.bg.fon.ps.repository.Repository;
+import rs.ac.bg.fon.ps.repository.db.DbRepository;
 import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbCategory;
 import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbProduct;
 import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbSize;
@@ -46,14 +47,14 @@ public class Controller {
     }
     
     public User logIn(String username, String password) throws Exception {
-        storageUser.connect();
+        ((DbRepository)storageUser).connect();
         List<User> users = null;
         try {
             users = storageUser.getAll();
         } catch (Exception e) {
             throw e;
         } finally {
-            storageUser.disconnect();
+            ((DbRepository)storageUser).disconnect();
         }
         for (User user : users) {
             if (user.getUsername().equals(username)) {
@@ -67,74 +68,80 @@ public class Controller {
     }
     
     public List<Category> getAllCategories() throws Exception {
-        storageCategory.connect();
+        ((DbRepository)storageCategory).connect();
         List<Category> categories = null;
         try {
             categories = storageCategory.getAll();
         } catch (Exception e) {
             throw e;
         } finally {
-            storageCategory.disconnect();
+            ((DbRepository)storageCategory).disconnect();
         }
         return categories;
     }
     
     public List<Size> getAllSizes() throws Exception {
-        storageSize.connect();
+        ((DbRepository)storageSize).connect();
         List<Size> sizes = null;
         try {
             sizes = storageSize.getAll();
         } catch (Exception e) {
             throw e;
         } finally {
-            storageSize.disconnect();
+            ((DbRepository)storageSize).disconnect();
         }
         return sizes;
     }
     
     public void addProduct(Product product) throws Exception {
-        storageProduct.connect();
+        ((DbRepository)storageProduct).connect();
         try {
             storageProduct.add(product);
+            ((DbRepository)storageProduct).commit();
         } catch (Exception e) {
+            ((DbRepository)storageProduct).rollback();
             throw e;
         } finally {
-            storageProduct.disconnect();
+            ((DbRepository)storageProduct).disconnect();
         }
     }
     
     public List<Product> getAllProducts() throws Exception {
-        storageProduct.connect();
+        ((DbRepository)storageProduct).connect();
         List<Product> products = null;
         try {
             products = storageProduct.getAll();
         } catch (Exception e) {
             throw e;
         } finally {
-            storageProduct.disconnect();
+            ((DbRepository)storageProduct).disconnect();
         }
         return products;
     }
 
     public void updateProduct(Product product) throws Exception {
-        storageProduct.connect();
+        ((DbRepository)storageProduct).connect();
         try {
             storageProduct.update(product);
+            ((DbRepository)storageProduct).commit();
         } catch (Exception e) {
+            ((DbRepository)storageProduct).rollback();
             throw e;
         } finally {
-            storageProduct.disconnect();
+            ((DbRepository)storageProduct).disconnect();
         }
     }
 
     public void deleteProduct(Product product) throws Exception {
-        storageProduct.connect();
+        ((DbRepository)storageProduct).connect();
         try {
             storageProduct.delete(product);
+            ((DbRepository)storageProduct).commit();
         } catch (Exception e) {
+            ((DbRepository)storageProduct).rollback();
             throw e;
         } finally {
-            storageProduct.disconnect();
+            ((DbRepository)storageProduct).disconnect();
         }
     }
     

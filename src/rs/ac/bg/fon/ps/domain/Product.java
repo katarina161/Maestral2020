@@ -110,6 +110,11 @@ public class Product {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return article+ " " +name;
+    }
     
     
     

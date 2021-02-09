@@ -18,7 +18,7 @@ import rs.ac.bg.fon.ps.repository.db.DbRepository;
  *
  * @author Katarina
  */
-public class RepositoryDbSize implements DbRepository<Size, Long> {
+public class RepositoryDbSize implements DbRepository<Size> {
 
     @Override
     public void add(Size param) throws Exception {
@@ -53,11 +53,6 @@ public class RepositoryDbSize implements DbRepository<Size, Long> {
 
     @Override
     public void delete(Size param) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Size get(Long id) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

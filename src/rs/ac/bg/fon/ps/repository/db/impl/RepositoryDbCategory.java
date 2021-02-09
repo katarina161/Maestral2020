@@ -18,7 +18,7 @@ import rs.ac.bg.fon.ps.repository.db.DbRepository;
  *
  * @author Katarina
  */
-public class RepositoryDbCategory implements DbRepository<Category, Long> {
+public class RepositoryDbCategory implements DbRepository<Category> {
 
     @Override
     public void add(Category param) throws Exception {
@@ -55,10 +55,4 @@ public class RepositoryDbCategory implements DbRepository<Category, Long> {
     public void delete(Category param) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public Category get(Long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

@@ -7,7 +7,6 @@ package rs.ac.bg.fon.ps.view.form;
 
 import java.awt.event.ActionListener;
 import javax.swing.JMenu;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -36,6 +35,12 @@ public class FrmMain extends javax.swing.JFrame {
         menuProduct = new javax.swing.JMenu();
         miProductNew = new javax.swing.JMenuItem();
         miProductSearch = new javax.swing.JMenuItem();
+        menuInvoice = new javax.swing.JMenu();
+        miInvoiceNew = new javax.swing.JMenuItem();
+        miInvoiceSearch = new javax.swing.JMenuItem();
+        menuEmployer = new javax.swing.JMenu();
+        miEmployerNew = new javax.swing.JMenuItem();
+        miEmployerSearch = new javax.swing.JMenuItem();
         menuAbout = new javax.swing.JMenu();
         menuUser = new javax.swing.JMenu();
         miLogOut = new javax.swing.JMenuItem();
@@ -68,6 +73,36 @@ public class FrmMain extends javax.swing.JFrame {
 
         menuMain.add(menuProduct);
 
+        menuInvoice.setForeground(new java.awt.Color(2, 26, 126));
+        menuInvoice.setText("Invoice");
+        menuInvoice.setFont(new java.awt.Font("Bauhaus 93", 0, 24)); // NOI18N
+
+        miInvoiceNew.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        miInvoiceNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/invoice.png"))); // NOI18N
+        miInvoiceNew.setText("Create");
+        menuInvoice.add(miInvoiceNew);
+
+        miInvoiceSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        miInvoiceSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/invoice-search.png"))); // NOI18N
+        miInvoiceSearch.setText("Search");
+        menuInvoice.add(miInvoiceSearch);
+
+        menuMain.add(menuInvoice);
+
+        menuEmployer.setForeground(new java.awt.Color(2, 26, 126));
+        menuEmployer.setText("Employer");
+        menuEmployer.setFont(new java.awt.Font("Bauhaus 93", 0, 24)); // NOI18N
+
+        miEmployerNew.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        miEmployerNew.setText("Register");
+        menuEmployer.add(miEmployerNew);
+
+        miEmployerSearch.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        miEmployerSearch.setText("Search");
+        menuEmployer.add(miEmployerSearch);
+
+        menuMain.add(menuEmployer);
+
         menuAbout.setForeground(new java.awt.Color(2, 26, 126));
         menuAbout.setText("About");
         menuAbout.setFont(new java.awt.Font("Bauhaus 93", 0, 24)); // NOI18N
@@ -79,11 +114,6 @@ public class FrmMain extends javax.swing.JFrame {
         miLogOut.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         miLogOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/logout.png"))); // NOI18N
         miLogOut.setText("Log out");
-        miLogOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miLogOutActionPerformed(evt);
-            }
-        });
         menuUser.add(miLogOut);
 
         menuMain.add(menuUser);
@@ -110,25 +140,19 @@ public class FrmMain extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void miLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogOutActionPerformed
-        try {
-            this.dispose();
-//            ViewController.getInstance().logOUt();
-            JOptionPane.showMessageDialog(this, "You've been successfully logged out.", "Log out", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error occured. Log out failed.", "Log out error", JOptionPane.ERROR_MESSAGE);
-        }
-        
-    }//GEN-LAST:event_miLogOutActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblImage;
     private javax.swing.JMenu menuAbout;
+    private javax.swing.JMenu menuEmployer;
+    private javax.swing.JMenu menuInvoice;
     private javax.swing.JMenuBar menuMain;
     private javax.swing.JMenu menuProduct;
     private javax.swing.JMenu menuUser;
+    private javax.swing.JMenuItem miEmployerNew;
+    private javax.swing.JMenuItem miEmployerSearch;
+    private javax.swing.JMenuItem miInvoiceNew;
+    private javax.swing.JMenuItem miInvoiceSearch;
     private javax.swing.JMenuItem miLogOut;
     private javax.swing.JMenuItem miProductNew;
     private javax.swing.JMenuItem miProductSearch;
@@ -144,5 +168,13 @@ public class FrmMain extends javax.swing.JFrame {
 
     public void jmiProductSearchAddActionListener(ActionListener actionListener) {
         miProductSearch.addActionListener(actionListener);
+    }
+
+    public void jmiLogOutAddActionListener(ActionListener actionListener) {
+        miLogOut.addActionListener(actionListener);
+    }
+
+    public void jmiInvoiceNewAddActionListener(ActionListener actionListener) {
+        miInvoiceNew.addActionListener(actionListener);
     }
 }

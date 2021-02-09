@@ -11,16 +11,22 @@ import rs.ac.bg.fon.ps.repository.Repository;
  *
  * @author Katarina
  */
-public interface DbRepository <T, K> extends Repository<T, K>{
+public interface DbRepository <T> extends Repository<T>{
 
-    @Override
     public default void connect() throws Exception {
         DbConnectionFactory.getInstance().getConnection();
     }
 
-    @Override
     public default void disconnect() throws Exception {
         DbConnectionFactory.getInstance().getConnection().close();
+    }
+    
+    public default void commit() throws Exception {
+        DbConnectionFactory.getInstance().getConnection().commit();
+    }
+    
+    public default void rollback() throws Exception {
+        DbConnectionFactory.getInstance().getConnection().rollback();
     }
     
 }
