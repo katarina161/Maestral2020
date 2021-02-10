@@ -177,4 +177,8 @@ public class FrmMain extends javax.swing.JFrame {
     public void jmiInvoiceNewAddActionListener(ActionListener actionListener) {
         miInvoiceNew.addActionListener(actionListener);
     }
+
+    public void jmiInvoiceSearchAddActionListener(ActionListener actionListener) {
+        miInvoiceSearch.addActionListener(actionListener);
+    }
 }

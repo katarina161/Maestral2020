@@ -7,9 +7,9 @@ package rs.ac.bg.fon.ps.view.component.table;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import rs.ac.bg.fon.ps.domain.Invoice;
 import rs.ac.bg.fon.ps.domain.InvoiceItem;
 import rs.ac.bg.fon.ps.domain.Product;
 import rs.ac.bg.fon.ps.domain.Size;
@@ -18,14 +18,14 @@ import rs.ac.bg.fon.ps.domain.Size;
  *
  * @author Katarina
  */
-public class InvoiceItemTableModel extends AbstractTableModel{
-    
+public class InvoiceItemTableModel extends AbstractTableModel {
+
     private final String[] columnNames = new String[]{"Order No.", "Product", "Size", "Price", "Quantity"};
     private final Class[] columnClasses = new Class[]{Integer.class, Product.class, Size.class, BigDecimal.class, Integer.class};
-    private List<InvoiceItem> items;
+    private Invoice invoice;
 
     public InvoiceItemTableModel() {
-        items = new ArrayList<>();
+        invoice = new Invoice();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class InvoiceItemTableModel extends AbstractTableModel{
 
     @Override
     public int getRowCount() {
-        return items.size();
+        return invoice.getItems().size();
     }
 
     @Override
@@ -55,8 +55,8 @@ public class InvoiceItemTableModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        InvoiceItem item = items.get(rowIndex);
-        
+        InvoiceItem item = invoice.getItems().get(rowIndex);
+
         switch (columnIndex) {
             case 0:
                 return item.getOrderNumber();
@@ -75,8 +75,8 @@ public class InvoiceItemTableModel extends AbstractTableModel{
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
-        InvoiceItem item = items.get(rowIndex);
-        
+        InvoiceItem item = invoice.getItems().get(rowIndex);
+
         switch (columnIndex) {
             case 2:
                 item.setSize((Size) value);
@@ -85,12 +85,64 @@ public class InvoiceItemTableModel extends AbstractTableModel{
                 int quantity = (int) value;
                 if (quantity > 0) {
                     item.setQuantity(quantity);
+                    item.setTotal(item.getPrice().multiply(new BigDecimal(item.getQuantity())));
+                    updateInvoiceTotalPrice();
                 }
+                break;
         }
     }
 
     public List<InvoiceItem> getItems() {
-        return items;
+        return invoice.getItems();
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void addInvoiceItem(InvoiceItem itm) {
+        InvoiceItem item = null;
+        for (int i = 0; i < invoice.getItems().size(); i++) {
+            if (invoice.getItems().get(i).getProduct().equals(itm.getProduct())
+                    && invoice.getItems().get(i).getSize().equals(itm.getSize())) {
+                item = invoice.getItems().get(i);
+                item.setQuantity(itm.getQuantity() + invoice.getItems().get(i).getQuantity());
+            }
+        }
+        if (item == null) {
+            item = itm;
+            item.setInvoice(invoice);
+            item.setOrderNumber(invoice.getItems().size() + 1);
+            invoice.getItems().add(item);
+        }
+        item.setTotal(item.getPrice().multiply(new BigDecimal(item.getQuantity())));
+        updateInvoiceTotalPrice();
     }
     
+    public void removeveInvoiceItem(int row) {
+        invoice.getItems().remove(row);
+        setOrderNumbers();
+        updateInvoiceTotalPrice();
+    }
+
+    private void setOrderNumbers() {
+        int num = 0;
+        for (InvoiceItem item: invoice.getItems()) {
+            item.setOrderNumber(++num);
+        }
+    }
+    
+    private void updateInvoiceTotalPrice() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (InvoiceItem item : invoice.getItems()) {
+            total = total.add(item.getTotal());
+        }
+        invoice.setTotal(total);
+        fireTableDataChanged();
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+
 }

@@ -135,4 +135,8 @@ public class SearchProductsController {
         }
     }
 
+    public FrmSearchProducts getFrmSearchProducts() {
+        return frmSearchProducts;
+    }
+
 }

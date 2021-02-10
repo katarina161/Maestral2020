@@ -77,6 +77,13 @@ public class MainController {
                 MainCordinator.getInstance().openAddNewInvoiceForm();
             }
         });
+        
+        frmMain.jmiInvoiceSearchAddActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainCordinator.getInstance().openViewAllInvoicesForm();
+            }
+        });
     }
 
     public FrmMain getFrmMain() {

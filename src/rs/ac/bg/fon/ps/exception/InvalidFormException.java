@@ -3,12 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rs.ac.bg.fon.ps.view.util;
+package rs.ac.bg.fon.ps.exception;
 
 /**
  *
  * @author Katarina
  */
-public enum FormMode {
-    FORM_ADD, FORM_DETAIL, FORM_CANCEL, FORM_SAVED, FORM_PROCESSED
+public class InvalidFormException extends Exception{
+
+    public InvalidFormException() {
+    }
+
+    public InvalidFormException(String message) {
+        super(message);
+    }
+    
 }

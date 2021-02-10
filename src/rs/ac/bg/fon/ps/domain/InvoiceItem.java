@@ -6,6 +6,7 @@
 package rs.ac.bg.fon.ps.domain;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  *
@@ -89,5 +90,36 @@ public class InvoiceItem {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InvoiceItem other = (InvoiceItem) obj;
+        if (!Objects.equals(this.invoice, other.invoice)) {
+            return false;
+        }
+        if (!Objects.equals(this.product, other.product)) {
+            return false;
+        }
+        if (!Objects.equals(this.size, other.size)) {
+            return false;
+        }
+        return true;
+    }
+
     
 }

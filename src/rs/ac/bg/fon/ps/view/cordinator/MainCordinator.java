@@ -7,17 +7,17 @@ package rs.ac.bg.fon.ps.view.cordinator;
 
 import java.util.HashMap;
 import java.util.Map;
-import rs.ac.bg.fon.ps.domain.Product;
-import rs.ac.bg.fon.ps.view.constant.Constants;
 import rs.ac.bg.fon.ps.view.controller.InvoiceController;
 import rs.ac.bg.fon.ps.view.controller.LogInController;
 import rs.ac.bg.fon.ps.view.controller.MainController;
 import rs.ac.bg.fon.ps.view.controller.ProductController;
+import rs.ac.bg.fon.ps.view.controller.SearchInvoicesController;
 import rs.ac.bg.fon.ps.view.controller.SearchProductsController;
 import rs.ac.bg.fon.ps.view.form.FrmInvoice;
 import rs.ac.bg.fon.ps.view.form.FrmLogIn;
 import rs.ac.bg.fon.ps.view.form.FrmMain;
 import rs.ac.bg.fon.ps.view.form.FrmProduct;
+import rs.ac.bg.fon.ps.view.form.FrmSearchInvoices;
 import rs.ac.bg.fon.ps.view.form.FrmSearchProducts;
 import rs.ac.bg.fon.ps.view.util.FormMode;
 
@@ -26,15 +26,15 @@ import rs.ac.bg.fon.ps.view.util.FormMode;
  * @author Katarina
  */
 public class MainCordinator {
-    
+
     private static MainCordinator instance;
     private final Map<String, Object> params;
-    
+
     private MainController mainController;
     private SearchProductsController searchProductsController;
+    private SearchInvoicesController searchInvoicesController;
 
     private MainCordinator() {
-//        mainController = new MainController(new FrmMain());
         params = new HashMap<>();
     }
 
@@ -53,11 +53,11 @@ public class MainCordinator {
     public MainController getMainController() {
         return mainController;
     }
-    
+
     public Object getParam(String name) {
         return params.get(name);
     }
-    
+
     public void addParam(String name, Object object) {
         params.put(name, object);
     }
@@ -73,8 +73,8 @@ public class MainCordinator {
     }
 
     public void openViewAllProductsForm() {
-        searchProductsController = 
-                new SearchProductsController(new FrmSearchProducts(mainController.getFrmMain(), true));
+        searchProductsController
+                = new SearchProductsController(new FrmSearchProducts(mainController.getFrmMain(), true));
         searchProductsController.openForm();
     }
 
@@ -84,11 +84,23 @@ public class MainCordinator {
     }
 
     public void refreshProductsView() {
-        searchProductsController.refreshProductsView();
+        if (searchProductsController.getFrmSearchProducts().isVisible()) {
+            searchProductsController.refreshProductsView();
+        }
     }
 
     public void openAddNewInvoiceForm() {
         InvoiceController invoiceController = new InvoiceController(new FrmInvoice(mainController.getFrmMain(), true));
         invoiceController.openForm(FormMode.FORM_ADD);
+    }
+
+    public void openViewAllInvoicesForm() {
+        searchInvoicesController = new SearchInvoicesController(new FrmSearchInvoices(mainController.getFrmMain(), true));
+        searchInvoicesController.openForm();
+    }
+
+    public void openInvoiceDetailsForm() {
+        InvoiceController invoiceController = new InvoiceController(new FrmInvoice(mainController.getFrmMain(), true));
+        invoiceController.openForm(FormMode.FORM_DETAIL);
     }
 }

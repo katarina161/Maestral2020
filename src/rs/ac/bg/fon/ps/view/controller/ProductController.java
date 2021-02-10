@@ -8,12 +8,10 @@ package rs.ac.bg.fon.ps.view.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +26,6 @@ import rs.ac.bg.fon.ps.exception.ProductAlreadyExistException;
 import rs.ac.bg.fon.ps.exception.RequiredFieldsEmptyException;
 import rs.ac.bg.fon.ps.view.constant.Constants;
 import rs.ac.bg.fon.ps.view.cordinator.MainCordinator;
-import rs.ac.bg.fon.ps.view.form.FrmMain;
 import rs.ac.bg.fon.ps.view.form.FrmProduct;
 import rs.ac.bg.fon.ps.view.util.FormMode;
 
@@ -39,11 +36,11 @@ import rs.ac.bg.fon.ps.view.util.FormMode;
 public class ProductController {
 
     private final FrmProduct frmProduct;
-    private final FrmMain parent;
+//    private final FrmMain parent;
 
     public ProductController(FrmProduct frmProduct) {
         this.frmProduct = frmProduct;
-        this.parent = MainCordinator.getInstance().getMainController().getFrmMain();
+//        this.parent = MainCordinator.getInstance().getMainController().getFrmMain();
         addActionListener();
     }
 
@@ -183,7 +180,7 @@ public class ProductController {
     }
 
     public void openForm(FormMode formMode) {
-        frmProduct.setLocationRelativeTo(parent);
+        frmProduct.setLocationRelativeTo(frmProduct.getParent());
         frmProduct.setResizable(false);
         try {
             prepareView(formMode);
@@ -249,7 +246,7 @@ public class ProductController {
         frmProduct.getTxtDescription().setText(String.valueOf(product.getDescription()));
         frmProduct.getCmbCategory().setSelectedItem(product.getCategory());
         DefaultListModel listModel = (DefaultListModel) frmProduct.getListSelectedSizes().getModel();
-        
+
         List<Size> sizes = product.getSizes();
         Collections.sort(sizes, new Comparator<Size>() {
             @Override
@@ -260,7 +257,7 @@ public class ProductController {
         for (Size size : sizes) {
             listModel.addElement(size);
         }
-        
+
         frmProduct.getTxtPriceWithoutVAT().setText(String.valueOf(product.getPriceWithoutVAT().setScale(2, RoundingMode.HALF_UP).doubleValue()));
         frmProduct.getTxtPriceWithVAT().setText(String.valueOf(product.getPriceWithVAT().setScale(2, RoundingMode.HALF_UP).doubleValue()));
     }
@@ -273,7 +270,7 @@ public class ProductController {
         product.setCategory((Category) frmProduct.getCmbCategory().getSelectedItem());
         product.setSizes(getSelectedSizes());
         product.setPriceWithoutVAT(new BigDecimal(frmProduct.getTxtPriceWithoutVAT().getText().trim()));
-        product.setPriceWithVAT(calculatePriceWithVAT().round(new MathContext(4)));
+        product.setPriceWithVAT(calculatePriceWithVAT());
 
         return product;
     }
@@ -342,16 +339,11 @@ public class ProductController {
     private BigDecimal calculatePriceWithVAT() {
         try {
             validatePrice();
-            double priceWithout = Double.parseDouble(frmProduct.getTxtPriceWithoutVAT().getText().trim());
+            BigDecimal priceWithout = new BigDecimal(frmProduct.getTxtPriceWithoutVAT().getText().trim());
             int VATpercentage = Integer.parseInt(frmProduct.getTxtVATPercentage().getText().trim());
-            BigDecimal priceWith = new BigDecimal(priceWithout * (1 + VATpercentage / 100.00));
+            BigDecimal priceWith = priceWithout.multiply(new BigDecimal(1 + VATpercentage / 100.00));
             frmProduct.getTxtPriceWithVAT().setText(String.valueOf(priceWith.setScale(2, RoundingMode.HALF_UP).doubleValue()));
             return priceWith;
-//            double priceWithout = Double.parseDouble(frmProduct.getTxtPriceWithoutVAT().getText().trim());
-//            int VATpercentage = Integer.parseInt(frmProduct.getTxtVATPercentage().getText().trim());
-//            double priceWith
-//                    = new BigDecimal(priceWithout * (1 + VATpercentage / 100.00)).setScale(2, RoundingMode.HALF_UP).doubleValue();
-//            frmProduct.getTxtPriceWithVAT().setText(String.valueOf(priceWith));
         } catch (NumberFormatException | NegativePriceException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(frmProduct, "Price and VAT percentage must be a positive number!", "Price Error", JOptionPane.ERROR_MESSAGE);

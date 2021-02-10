@@ -8,6 +8,8 @@ package rs.ac.bg.fon.ps.view.form;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -16,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
 
 /**
@@ -70,6 +74,7 @@ public class FrmInvoice extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         txtQuantity = new javax.swing.JTextField();
         btnAddItem = new javax.swing.JButton();
+        lblAddItemError = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
@@ -78,6 +83,9 @@ public class FrmInvoice extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        btnEdit = new javax.swing.JButton();
+        btnProcess = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Invoice");
@@ -114,18 +122,21 @@ public class FrmInvoice extends javax.swing.JDialog {
         jLabel3.setText("Invoice number:");
 
         txtNumber.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        txtNumber.setDisabledTextColor(new java.awt.Color(51, 51, 51));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Date:");
 
         txtDate.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        txtDate.setDisabledTextColor(new java.awt.Color(51, 51, 51));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Partner:");
 
         txtPartner.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        txtPartner.setDisabledTextColor(new java.awt.Color(51, 51, 51));
 
         lblUser.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         lblUser.setForeground(new java.awt.Color(255, 255, 255));
@@ -140,18 +151,13 @@ public class FrmInvoice extends javax.swing.JDialog {
         panelInvoiceLayout.setHorizontalGroup(
             panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelInvoiceLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
                 .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelInvoiceLayout.createSequentialGroup()
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelInvoiceLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
                         .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblInvoicePic)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 446, Short.MAX_VALUE)
+                        .addGap(540, 540, 540)
                         .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInvoiceLayout.createSequentialGroup()
                                 .addComponent(jLabel3)
@@ -165,7 +171,12 @@ public class FrmInvoice extends javax.swing.JDialog {
                                 .addGroup(panelInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtPartner, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInvoiceLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblUser, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelInvoiceLayout.setVerticalGroup(
@@ -230,17 +241,18 @@ public class FrmInvoice extends javax.swing.JDialog {
 
         cmbProducts.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         cmbProducts.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbProducts.setSelectedIndex(-1);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel7.setText("Size:");
 
         cmbSizes.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         cmbSizes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbSizes.setSelectedIndex(-1);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel8.setText("Price:");
 
-        txtPrice.setEditable(false);
         txtPrice.setBackground(new java.awt.Color(255, 255, 255));
         txtPrice.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
 
@@ -254,6 +266,8 @@ public class FrmInvoice extends javax.swing.JDialog {
         btnAddItem.setForeground(new java.awt.Color(255, 255, 255));
         btnAddItem.setText("Add");
 
+        lblAddItemError.setForeground(new java.awt.Color(204, 0, 0));
+
         javax.swing.GroupLayout panelItemLayout = new javax.swing.GroupLayout(panelItem);
         panelItem.setLayout(panelItemLayout);
         panelItemLayout.setHorizontalGroup(
@@ -262,30 +276,29 @@ public class FrmInvoice extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(panelItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelItemLayout.createSequentialGroup()
-                        .addComponent(btnAddItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(panelItemLayout.createSequentialGroup()
                         .addGroup(panelItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(cmbProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
                         .addGroup(panelItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(cmbSizes, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(60, 60, 60)
+                        .addGap(115, 115, 115)
                         .addGroup(panelItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(105, 105, 105)
                         .addGroup(panelItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(98, 98, 98))))
+                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblAddItemError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         panelItemLayout.setVerticalGroup(
             panelItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelItemLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelItemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
@@ -297,26 +310,27 @@ public class FrmInvoice extends javax.swing.JDialog {
                     .addComponent(cmbSizes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(lblAddItemError, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAddItem)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(19, 19, 19))
         );
 
         panelItemLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbProducts, cmbSizes, txtPrice, txtQuantity});
 
-        btnSave.setBackground(new java.awt.Color(101, 149, 224));
+        btnSave.setBackground(new java.awt.Color(204, 204, 204));
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/invoice-save.png"))); // NOI18N
         btnSave.setText("Save");
 
-        btnClose.setBackground(new java.awt.Color(101, 149, 224));
+        btnClose.setBackground(new java.awt.Color(204, 204, 204));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        btnClose.setForeground(new java.awt.Color(255, 255, 255));
         btnClose.setText("Close");
 
-        btnCancel.setBackground(new java.awt.Color(101, 149, 224));
+        btnCancel.setBackground(new java.awt.Color(204, 204, 204));
         btnCancel.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        btnCancel.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/invoice-cancel.png"))); // NOI18N
         btnCancel.setText("Cancel Invoice");
 
         jPanel2.setBackground(new java.awt.Color(176, 204, 247));
@@ -327,7 +341,7 @@ public class FrmInvoice extends javax.swing.JDialog {
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("TOTAL");
 
-        lblTotal.setFont(new java.awt.Font("Tahoma", 1, 40)); // NOI18N
+        lblTotal.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         lblTotal.setForeground(new java.awt.Color(255, 255, 255));
         lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         lblTotal.setText("0");
@@ -341,13 +355,15 @@ public class FrmInvoice extends javax.swing.JDialog {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(253, 253, 253)
+                        .addComponent(jLabel10))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -356,7 +372,7 @@ public class FrmInvoice extends javax.swing.JDialog {
                 .addGap(46, 46, 46)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotal)
                     .addComponent(jLabel11))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -367,39 +383,64 @@ public class FrmInvoice extends javax.swing.JDialog {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(717, 717, 717)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        btnEdit.setBackground(new java.awt.Color(204, 204, 204));
+        btnEdit.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/invoice-edit.png"))); // NOI18N
+        btnEdit.setText("Edit Invoice");
+
+        btnProcess.setBackground(new java.awt.Color(204, 204, 204));
+        btnProcess.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnProcess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/invoice-process.png"))); // NOI18N
+        btnProcess.setText("Process");
+
+        btnDelete.setBackground(new java.awt.Color(204, 204, 204));
+        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rs/ac/bg/fon/ps/view/image/invoice-delete.png"))); // NOI18N
+        btnDelete.setText("Delete");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(72, 72, 72)
+                        .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tblScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 1017, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cbProcessed)
                         .addGap(18, 18, 18)
                         .addComponent(cbCanceled)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(tblScroll)
-                    .addComponent(panelItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(675, 675, 675)
+                        .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {panelItem, tblScroll});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -413,13 +454,18 @@ public class FrmInvoice extends javax.swing.JDialog {
                 .addComponent(tblScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(panelItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnClose)
-                    .addComponent(btnSave)
-                    .addComponent(btnCancel))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnClose)
+                        .addComponent(btnCancel)
+                        .addComponent(btnDelete))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSave)
+                        .addComponent(btnEdit)
+                        .addComponent(btnProcess)))
                 .addContainerGap())
         );
 
@@ -442,6 +488,9 @@ public class FrmInvoice extends javax.swing.JDialog {
     private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnProcess;
     private javax.swing.JButton btnRemoveItem;
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox cbCanceled;
@@ -463,6 +512,7 @@ public class FrmInvoice extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblAddItemError;
     private javax.swing.JLabel lblInvoicePic;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblUser;
@@ -495,6 +545,22 @@ public class FrmInvoice extends javax.swing.JDialog {
 
     public JButton getBtnCancel() {
         return btnCancel;
+    }
+
+    public JButton getBtnClose() {
+        return btnClose;
+    }
+
+    public JButton getBtnDelete() {
+        return btnDelete;
+    }
+
+    public JButton getBtnEdit() {
+        return btnEdit;
+    }
+
+    public JButton getBtnProcess() {
+        return btnProcess;
     }
 
     public JButton getBtnSave() {
@@ -553,8 +619,28 @@ public class FrmInvoice extends javax.swing.JDialog {
         return lblUser;
     }
 
-    public void cmbProductAddActionListener(ActionListener actionListener) {
-        cmbProducts.addActionListener(actionListener);
+    public JLabel getLblAddItemError() {
+        return lblAddItemError;
+    }
+
+    public void btnAddItemAddActionListener(ActionListener actionListener) {
+        btnAddItem.addActionListener(actionListener);
+    }
+
+    public void tblItemsAddSelectionListener(ListSelectionListener listSelectionListener) {
+        tblItems.getSelectionModel().addListSelectionListener(listSelectionListener);
+    }
+
+    public void btnRemoveItemAddActionListener(ActionListener actionListener) {
+        btnRemoveItem.addActionListener(actionListener);
+    }
+
+    public void btnCloseAddActionListener(ActionListener actionListener) {
+        btnClose.addActionListener(actionListener);
+    }
+
+    public void btnSaveAddActionListener(ActionListener actionListener) {
+        btnSave.addActionListener(actionListener);
     }
     
 }

@@ -9,10 +9,9 @@ package rs.ac.bg.fon.ps.view.constant;
  *
  * @author Katarina
  */
-public class Constants {
-    
-    public static final String PARAM_CURRENT_USER = "CURRENT_USER";
-    public static final String PARAM_PRODUCT = "PRODUCT";
-    public static final String PARAM_INVOICE = "INVOICE";
-    
+public enum InvoiceFilter {
+    All,
+    Unprocessed,
+    Processed,
+    Canceled,
 }

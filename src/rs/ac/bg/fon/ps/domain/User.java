@@ -18,16 +18,18 @@ public class User {
     private String lastName;
     private String username;
     private String password;
+    private boolean administrator;
 
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, String username, String password) {
+    public User(Long id, String firstName, String lastName, String username, String password, boolean administrator) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
+        this.administrator = administrator;
     }
 
     public Long getId() {
@@ -68,6 +70,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdministrator() {
+        return administrator;
+    }
+
+    public void setAdministrator(boolean administrator) {
+        this.administrator = administrator;
     }
 
     @Override

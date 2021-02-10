@@ -5,8 +5,10 @@
  */
 package rs.ac.bg.fon.ps.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import rs.ac.bg.fon.ps.domain.Category;
+import rs.ac.bg.fon.ps.domain.Invoice;
 import rs.ac.bg.fon.ps.domain.Product;
 import rs.ac.bg.fon.ps.domain.Size;
 import rs.ac.bg.fon.ps.domain.User;
@@ -15,6 +17,7 @@ import rs.ac.bg.fon.ps.exception.UnknownUserException;
 import rs.ac.bg.fon.ps.repository.Repository;
 import rs.ac.bg.fon.ps.repository.db.DbRepository;
 import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbCategory;
+import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbInvoice;
 import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbProduct;
 import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbSize;
 import rs.ac.bg.fon.ps.repository.db.impl.RepositoryDbUser;
@@ -30,12 +33,14 @@ public class Controller {
     private final Repository storageCategory;
     private final Repository storageSize;
     private final Repository storageProduct;
+    private final Repository storageInvoice;
     
     private Controller() {
         storageUser = new RepositoryDbUser();
         storageCategory = new RepositoryDbCategory();
         storageSize = new RepositoryDbSize();
         storageProduct = new RepositoryDbProduct();
+        storageInvoice = new RepositoryDbInvoice();
     }
     
     public static Controller getInstance() {
@@ -143,6 +148,33 @@ public class Controller {
         } finally {
             ((DbRepository)storageProduct).disconnect();
         }
+    }
+
+    public void saveInvoice(Invoice invoice) throws Exception {
+        ((DbRepository)storageInvoice).connect();
+        try {
+            storageInvoice.add(invoice);
+            ((DbRepository)storageInvoice).commit();
+        } catch (Exception e) {
+            ((DbRepository)storageInvoice).rollback();
+            throw e;
+        } finally {
+            ((DbRepository)storageInvoice).disconnect();
+        }
+    }
+    
+    public List<Invoice> getAllInvoices() throws Exception {
+        ((DbRepository)storageInvoice).connect();
+        List<Invoice> invoices = new ArrayList<>();
+        try {
+            invoices = storageInvoice.getAll();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            ((DbRepository)storageInvoice).disconnect();
+        }
+        
+        return invoices;
     }
     
 }
